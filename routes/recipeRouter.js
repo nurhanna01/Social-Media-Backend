@@ -42,7 +42,7 @@ function authenticateToken(req, res, next) {
   }
 }
 
-recipeRouter.get('/', recipeController.getRecipe);
+recipeRouter.get('/', authenticateToken, recipeController.getRecipe);
 recipeRouter.get('/my', authenticateToken, recipeController.getMyRecipe);
 recipeRouter.post('/', authenticateToken, upload.single('path'), recipeController.postRecipe);
 recipeRouter.put('/:id', authenticateToken, recipeController.putRecipe);

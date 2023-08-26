@@ -122,6 +122,81 @@ documentation.get('/', (req, res) => {
         Description: 'The API sent to the user for password reset containing a token to reset the password ',
       },
     },
+    recipes: {
+      getRecipe: {
+        Endpoint: '/api/recipe',
+        Method: 'GET',
+        Request: {
+          Body: {},
+          Header: {
+            accessToken: 'string',
+          },
+        },
+        Description: 'List of recipes posted by all users',
+      },
+
+      getMyRecipe: {
+        Endpoint: '/api/recipe/my',
+        Method: 'GET',
+        Request: {
+          Body: {},
+          Header: {
+            accessToken: 'string',
+          },
+        },
+        Description: 'List of recipes posted by user logged in based on token',
+      },
+
+      postRecipe: {
+        Endpoint: 'api/recipe',
+        Method: 'POST',
+        Request: {
+          Body: {
+            title: 'string',
+            description: 'string',
+            ingredients: 'string',
+            instructions: 'string',
+            path: 'file',
+            category: 'string',
+          },
+          Headers: {
+            accessToken: 'string',
+          },
+        },
+        Description: 'post new recipe with authentication',
+      },
+
+      putRecipe: {
+        Endpoint: '/api/recipe/:id',
+        Method: 'PUT',
+        Request: {
+          Body: {
+            title: 'string',
+            description: 'string',
+            ingredients: 'string',
+            instructions: 'string',
+            path: 'file',
+            category: 'string',
+          },
+          Headers: {
+            accessToken: 'string',
+          },
+        },
+        Description: 'The endpoint for editing a users owned post recipe.',
+      },
+
+      deleteRecipe: {
+        Endpoint: '/api/recipe/:id',
+        Method: 'DELETE',
+        Request: {
+          Body: {},
+          Headers: {
+            accessToken: 'string',
+          },
+        },
+        Description: 'The endpoint for delete user owned post recipe.',
+      },
+    },
   };
   res.json({
     status: 'success',
