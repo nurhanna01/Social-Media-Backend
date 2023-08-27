@@ -1,71 +1,30 @@
-import { Sequelize } from 'sequelize';
-import database from '../../config/database.js';
-// import { user, recipe } from '../../database/db.js';
-import recipeModel from '../../models/recipeModel.js';
-import userModel from '../../models/userModel.js';
-import app from '../../app.js';
+// NOTES:
+// Before running unit tests, please to follow the Supertest guidelines consistently.
+// Uncomment import model user in UserController
+// It helps to maintain a clean separation between  production and testing environments.
+
 import request from 'supertest';
+import app_test from './app_test.js';
+import { user } from './db_test';
 describe('test', () => {
-  let db;
-
   beforeAll(async () => {
-    // Setup database connection using the configuration from database.js
-    db = new Sequelize('culinary_adventures_test', database.user, database.password, {
-      host: database.host,
-      dialect: 'mysql',
-      pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000,
-      },
-    });
-
     try {
-      // connect to the database
-      await db.authenticate();
-      const recipe = recipeModel(db);
-      const user = userModel(db);
-      // Migrate the database schema
-      await db.sync({ force: true });
-
       // Seed initial data for testing
-      // Create a user
       const testUser = await user.create({
         username: 'testuser',
         password: 'testpassword',
-        email: 'test@example.com',
+        email: 'test@gmail.com',
       });
-      // Create a recipe associated with the user
-      await recipe.create({ title: 'Recipe 1', user_id: testUser.id }); // Use the user's ID as the userId
     } catch (error) {
-      // console.error('Unable to connect to the database:', error);
+      console.error(error.message);
+      if (error.errors) {
+        error.errors.forEach((err) => {
+          console.error(err.message);
+        });
+      }
     }
   });
-  afterAll(async () => {
-    //   // Close the database connection
-    await db.close();
-  });
-  // check db connection
-  // it('should establish a successful database connection', async () => {
-  //   try {
-  //     await db.authenticate();
-  //     expect(db).toBeTruthy(); // Assertion to ensure the database object exists
-  //   } catch (error) {
-  //     throw new Error('Unable to connect to the database: ' + error.message);
-  //   }
-  // });
-
-  // // check initial user and recipedata
-  // it('should check seed initial user and recipe data', async () => {
-  //   // Seed initial data for testing
-  //   // Assertion to check if the data has been created successfully
-  //   const testUser = await user.findOne({ where: { username: 'testuser' } });
-  //   const testRecipe = await recipe.findOne({ where: { title: 'Recipe 1' } });
-
-  //   expect(testUser).toBeTruthy();
-  //   expect(testRecipe).toBeTruthy();
-  // });
+  afterAll(async () => {});
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   // USER REGISTER
@@ -73,11 +32,11 @@ describe('test', () => {
 
   it('should send status success if username, password, and email are sent', async () => {
     const newUser = {
-      username: 'hanna1',
+      username: 'hanna',
       password: '123',
-      email: 'hanna1@example.com',
+      email: 'hanna@example.com',
     };
-    const response = await request(app).post('/api/user/register').send(newUser).set('Accept', 'application/json');
+    const response = await request(app_test).post('/api/user/register').send(newUser).set('Accept', 'application/json');
     expect(response.body.status).toEqual('success');
     expect(response.body.statusCode).toEqual(201);
     expect(response.body.message).toEqual('User created successfully');
@@ -86,9 +45,9 @@ describe('test', () => {
   });
 
   it('should send error if email is already used', async () => {
-    const response = await request(app)
+    const response = await request(app_test)
       .post('/api/user/register')
-      .send({ username: 'username', password: '123', email: 'test@example.com' })
+      .send({ username: 'username', password: '123', email: 'test@gmail.com' })
       .set('Accept', 'application/json');
     expect(response.body.status).toEqual('error');
     expect(response.body.statusCode).toEqual(400);
@@ -96,7 +55,7 @@ describe('test', () => {
   });
 
   it('should send error if username is already used', async () => {
-    const response = await request(app)
+    const response = await request(app_test)
       .post('/api/user/register')
       .send({ username: 'testuser', password: '123', email: 'tes@example.com' })
       .set('Accept', 'application/json');
@@ -105,11 +64,11 @@ describe('test', () => {
     expect(response.body.message).toEqual('Username already exists');
   });
 
-  it('should send internal server error', async () => {
-    const response = await request(app).post('/api/user/register').send({}).set('Accept', 'application/json');
+  it('should return wsername cannt be empty', async () => {
+    const response = await request(app_test).post('/api/user/register').send({}).set('Accept', 'application/json');
     expect(response.body.status).toEqual('error');
-    expect(response.body.statusCode).toEqual(500);
-    expect(response.body.message).toEqual('Internal server error');
+    expect(response.body.statusCode).toEqual(400);
+    expect(response.body.message).toEqual('Username cannot be empty');
   });
 
   // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -120,7 +79,7 @@ describe('test', () => {
       username: 'hanna',
       password: '123',
     };
-    const response = await request(app).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
+    const response = await request(app_test).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
     expect(response.body.status).toEqual('success');
     expect(response.body.statusCode).toEqual(200);
     expect(response.body.message).toEqual('User logged in successfully');
@@ -131,7 +90,7 @@ describe('test', () => {
       username: 'hanna',
       password: '123456',
     };
-    const response = await request(app).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
+    const response = await request(app_test).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
     expect(response.body.status).toEqual('error');
     expect(response.body.statusCode).toEqual(404);
     expect(response.body.message).toEqual('Wrong Password');
@@ -142,13 +101,9 @@ describe('test', () => {
       username: 'han',
       password: '123',
     };
-    const response = await request(app).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
+    const response = await request(app_test).post('/api/user/login').send(userLogin).set('Accept', 'application/json');
     expect(response.body.status).toEqual('error');
     expect(response.body.statusCode).toEqual(404);
     expect(response.body.message).toEqual('Username incorrect');
   });
-
-  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  // USER / CHANGE PASSWORD
-  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 });

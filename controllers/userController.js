@@ -1,12 +1,13 @@
+// NOTES : for unit tests
+// uncomment the following line if you do unit testing with supertest, & comment imprt from db.js
+// import { user, recipe } from '../__test__/db_test.js';
 import { user, recipe } from '../database/db.js';
-// const jwt = require('jsonwebtoken');
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import nodemailer from 'nodemailer';
 import randtoken from 'rand-token';
 dotenv.config();
-// Fungsi untuk memvalidasi format email
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailRegex.test(email);
