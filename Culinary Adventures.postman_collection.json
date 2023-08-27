@@ -1,0 +1,2899 @@
+{
+	"info": {
+		"_postman_id": "4d677712-4866-44b1-9b1f-ed1f513ae03a",
+		"name": "Culinary Adventures",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11796875"
+	},
+	"item": [
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Post Recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "ingredients",
+									"type": "text"
+								},
+								{
+									"key": "instructions",
+									"value": "instructions",
+									"type": "text"
+								},
+								{
+									"key": "path",
+									"type": "file",
+									"src": "/C:/Users/Hp/Pictures/2.PNG"
+								},
+								{
+									"key": "category",
+									"value": "z",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/recipe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"recipe"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "hello",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "a",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "b",
+											"type": "text"
+										},
+										{
+											"key": "instructions",
+											"value": "c",
+											"type": "text"
+										},
+										{
+											"key": "path",
+											"type": "file",
+											"src": "/C:/Users/Hp/Pictures/kupuku.png"
+										},
+										{
+											"key": "category",
+											"value": "z",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/recipe",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "339"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"153-WKoh7FdAlqP5hzqMT25LO2e70HQ\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:08:50 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 201,\n    \"status\": \"success\",\n    \"message\": \"Recipe created successfully\",\n    \"data\": {\n        \"id\": 2,\n        \"title\": \"hello\",\n        \"description\": \"a\",\n        \"ingredients\": \"b\",\n        \"instructions\": \"c\",\n        \"path\": \"http://localhost:3000/path-1693044530797-981962495kupuku.png\",\n        \"category\": \"z\",\n        \"user_id\": 1,\n        \"updatedAt\": \"2023-08-26T10:08:50.834Z\",\n        \"createdAt\": \"2023-08-26T10:08:50.834Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Put Recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "judul edit baru",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "deskripsi",
+									"type": "text"
+								},
+								{
+									"key": "ingredients",
+									"value": "entah",
+									"type": "text"
+								},
+								{
+									"key": "instructions",
+									"value": "hehe",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"value": "huhu path",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "lala",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/recipe/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"recipe",
+								"4"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Put Recipe",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "judul saja",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "deskripsi saja",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "entah saja",
+											"type": "text"
+										},
+										{
+											"key": "instructions",
+											"value": "hehe",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"value": "huhu path",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "lalal",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "77"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4d-ujOVjz36HCZW7wMuCfu4ZGeamhA\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Aug 2023 23:49:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Recipe updated successfully\"\n}"
+						},
+						{
+							"name": "not found Put Recipe",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "judul saja",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "deskripsi saja",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "entah saja",
+											"type": "text"
+										},
+										{
+											"key": "instructions",
+											"value": "hehe",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"value": "huhu path",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "lalal",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/16",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"16"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "65"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"41-JODF62WZuKjjp0rqKfeV8e1pSPU\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Aug 2023 23:54:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"status\": \"failed\",\n    \"message\": \"recipe not found\"\n}"
+						},
+						{
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "title",
+											"value": "judul edit baru",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "deskripsi",
+											"type": "text"
+										},
+										{
+											"key": "ingredients",
+											"value": "entah",
+											"type": "text"
+										},
+										{
+											"key": "instructions",
+											"value": "hehe",
+											"type": "text"
+										},
+										{
+											"key": "image",
+											"value": "huhu path",
+											"type": "text"
+										},
+										{
+											"key": "category",
+											"value": "lalal",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"2"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "90"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5a-vubXiWn9KmdczRuAO0mY3zBKb1Y\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:47:57 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 403,\n    \"status\": \"Forbidden\",\n    \"message\": \"Access to this resource is restricted.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/recipe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"recipe"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Recipes from All user",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/recipe",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "880"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"370-aQEgR6i2GAMl4rJFV/tGxj4w65s\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:46:59 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Recipes retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 2,\n            \"title\": \"hello\",\n            \"description\": \"a\",\n            \"ingredients\": \"b\",\n            \"instructions\": \"c\",\n            \"path\": \"http://localhost:3000/path-1693044530797-981962495kupuku.png\",\n            \"category\": \"z\",\n            \"user_id\": 1,\n            \"createdAt\": \"2023-08-26T10:08:50.000Z\",\n            \"updatedAt\": \"2023-08-26T10:08:50.000Z\"\n        },\n        {\n            \"id\": 3,\n            \"title\": \"test\",\n            \"description\": \"hello\",\n            \"ingredients\": \"abc\",\n            \"instructions\": \"c\",\n            \"path\": \"http://localhost:3000/path-1693053828320-6057255822.PNG\",\n            \"category\": \"z\",\n            \"user_id\": 1,\n            \"createdAt\": \"2023-08-26T12:43:48.000Z\",\n            \"updatedAt\": \"2023-08-26T12:43:48.000Z\"\n        },\n        {\n            \"id\": 4,\n            \"title\": \"title\",\n            \"description\": \"description\",\n            \"ingredients\": \"ingredients\",\n            \"instructions\": \"instructions\",\n            \"path\": \"http://localhost:3000/path-1693054006560-9705308962.PNG\",\n            \"category\": \"z\",\n            \"user_id\": 7,\n            \"createdAt\": \"2023-08-26T12:46:46.000Z\",\n            \"updatedAt\": \"2023-08-26T12:46:46.000Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get my Recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/recipe/my",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"recipe",
+								"my"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get my Recipe",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/my",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"my"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "602"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"25a-WjrJ8QPsKnjA8uHLm3sPsYdXaSw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:32:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Recipes retrieved successfully\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"hehe\",\n            \"description\": \"lala\",\n            \"ingredients\": \"hmm\",\n            \"instructions\": \"a\",\n            \"path\": \"http://localhost:3000/path-1693044284307-696231696kupuku.png\",\n            \"category\": \"\",\n            \"user_id\": 1,\n            \"createdAt\": \"2023-08-26T10:04:44.000Z\",\n            \"updatedAt\": \"2023-08-26T10:04:44.000Z\"\n        },\n        {\n            \"id\": 2,\n            \"title\": \"hello\",\n            \"description\": \"a\",\n            \"ingredients\": \"b\",\n            \"instructions\": \"c\",\n            \"path\": \"http://localhost:3000/path-1693044530797-981962495kupuku.png\",\n            \"category\": \"z\",\n            \"user_id\": 1,\n            \"createdAt\": \"2023-08-26T10:08:50.000Z\",\n            \"updatedAt\": \"2023-08-26T10:08:50.000Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Recipe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/recipe/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"recipe",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "77"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4d-4VDyUzfwslsqg5UkKo4jyLb0p7A\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:34:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Recipe deleted successfully\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"1"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "65"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"41-Zz7Y0/uKctAVVa1hwI4yHq8nWgw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:45:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"status\": \"failed\",\n    \"message\": \"Recipe not found\"\n}"
+						},
+						{
+							"name": "Forbidden",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/recipe/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"recipe",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "90"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"5a-vubXiWn9KmdczRuAO0mY3zBKb1Y\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 12:45:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 403,\n    \"status\": \"Forbidden\",\n    \"message\": \"Access to this resource is restricted.\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "hanna",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "nurhanna9928@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "username already exist",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "hanna",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "nurhanna9928@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"47-InZL9df8Tq9N9pRCPgCtgXeKjPU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 06:33:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"Username already exists\"\n}"
+						},
+						{
+							"name": "email already used",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "hanna111",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "nurhanna9928@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"42-Yu183uMoKIJSvIHjSTDU38MseZw\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 06:35:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"Email already used\"\n}"
+						},
+						{
+							"name": "register success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "nurhanna1",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "nurhanna2223@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "155"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"9b-b3vicxxt475zG2mbIZARDftwX00\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 06:54:17 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 201,\n    \"status\": \"success\",\n    \"message\": \"User created successfully\",\n    \"data\": {\n        \"email\": \"nurhanna2223@gmail.com\",\n        \"username\": \"nurhanna1\",\n        \"active\": false\n    }\n}"
+						},
+						{
+							"name": "Invalid Email Format",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "han",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "nurhanna9928gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"44-ZlBrpV0oHkaKb/cJZyjDCykx04g\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 07:07:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"Invalid email format\"\n}"
+						},
+						{
+							"name": "Cann't be empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "nurhann9928@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "72"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"48-CH1Ibl8nUxpAPZKCBAJzX44QmvM\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:57:55 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"Username cannot be empty\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "hanna",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "incorrect username",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "hann",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"42-icMgMzGcw7OVMEMkOy2IAVrNbN4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 06:54:53 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"status\": \"error\",\n    \"message\": \"Username incorrect\"\n}"
+						},
+						{
+							"name": "wrong password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "hanna",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "62"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3e-Dk5h0E1OkpCtVthVWLbFsRwvBSc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 06:55:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"statusCode\": 404,\n    \"message\": \"Wrong Password\"\n}"
+						},
+						{
+							"name": "Success Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "username",
+											"value": "hanna",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "308"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"134-+tVCwbvg6XHOFDXkxzvNJxwZv2s\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 07:09:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"statusCode\": 200,\n    \"message\": \"User logged in successfully\",\n    \"data\": {\n        \"email\": \"nurhanna9928@gmail.com\",\n        \"username\": \"hanna\",\n        \"status_active\": false\n    },\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjkzMDMzNzU0LCJleHAiOjE2OTMwMzU1NTR9.HjvwtgbuainTJzn661_Z74Pj1Hb8EUu5kUX8JlDwJuY\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Send OTP for Verify Account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/otp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"otp"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Send OTP",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/otp",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"otp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "103"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"67-QfJ6jOf+UieRS609PVu/1ocuzvU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:15:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"OTP already sent successfully,Please check your email\"\n}"
+						}
+					]
+				},
+				{
+					"name": "ForgotPassword & send email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZlYmJ5IiwiaWF0IjoxNjkyMzE2NTc2LCJleHAiOjE2OTQxMTY1NzZ9.k0-f12QXgdhJ8PU466c6ZCZC4CdeSYCiE4ajb9PXIb8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "nurhanna9928@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/forgot-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"forgot-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "nurhanna9928@gmail.com",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/forgot-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "123"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7b-sg6TdauUkvuSd+dfSw07SWTYy5A\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:35:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"link for reset password already sent successfully,Please check your email\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/reset-password?token=7G8Gwbm3WBjKm0klN1Kf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "7G8Gwbm3WBjKm0klN1Kf"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "expired link more than 2 minutes",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/reset-password?token=qwmBcgBQr17GpTuwqobe",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"reset-password"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "qwmBcgBQr17GpTuwqobe"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "119"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"77-jYjQ3Khvsb6UVAB7zzwx8bKomwg\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:48:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"Bad Request\",\n    \"message\": \"Link already expired, please request  new link for reset password\"\n}"
+						},
+						{
+							"name": "succes reset password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "password",
+											"value": "12345",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/reset-password?token=Ez5uixbgIEAP0rYiPErP",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"reset-password"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "Ez5uixbgIEAP0rYiPErP"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "85"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"55-EYmIN1sMR5hDC8B+D2RVjux3bwE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:49:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"statusCode\": 200,\n    \"message\": \"Password already reset successfully\"\n}"
+						},
+						{
+							"name": "cann't be empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "password",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/reset-password?token=Ez5uixbgIEAP0rYiPErP",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"reset-password"
+									],
+									"query": [
+										{
+											"key": "token",
+											"value": "Ez5uixbgIEAP0rYiPErP"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "72"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"48-EabbJh+KlWk9G/Q00BrYHZUJ7yc\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:51:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"password cannot be empty\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "otp",
+									"value": "734004",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/verify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"verify"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid OTP",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "otp",
+											"value": "1111111",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "59"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"3b-QunaNE1Ri5eKkyFd0b9VjmuPwa4\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:18:54 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"status\": \"error\",\n    \"message\": \"Invalid OTP\"\n}"
+						},
+						{
+							"name": "OTP expired",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "otp",
+											"value": "604457",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "101"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"65-CDHn6xf+0xiYIAzz7cn45DKRTDA\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:47:37 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"Bad Request\",\n    \"message\": \"OTP already expired, please request for new OTP\"\n}"
+						},
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "otp",
+											"value": "808017",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/verify",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"verify"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4f-h5m+CuFKCLeJYMtiVUS4LcUg7u8\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:48:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Account verified successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "change password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oldPassword",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "newPassword",
+									"value": "1233",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"change-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success change password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "123",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "1234",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/change",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"change"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "79"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4f-hn9FHxHszwoxCo1Qb9zYvpOlyMk\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 17 Aug 2023 23:27:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"message\": \"Password changed successfully\"\n}"
+						},
+						{
+							"name": "Invalid Old Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "1234",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "1233",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/change-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"change-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "68"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"44-78XQV6P2cJTzcdkAeGcRZCCkOx0\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:49:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 404,\n    \"status\": \"error\",\n    \"message\": \"Invalid Old Password\"\n}"
+						},
+						{
+							"name": "Cannot be empty",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "oldPassword",
+											"value": "321",
+											"type": "text"
+										},
+										{
+											"key": "newPassword",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://localhost:3000/api/user/change-password",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										"change-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "76"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4c-Egw248suKaN2+uaL+BepqasbQJE\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 09:54:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"status\": \"error\",\n    \"message\": \"New password cannot be empty\"\n}"
+						}
+					]
+				},
+				{
+					"name": "My Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/user/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "My Profile",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3000/api/user/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"api",
+										"user",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "384"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"180-yJowIPDc2Iw5idlQYMUpNICS0hk\""
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 26 Aug 2023 10:06:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"status\": \"success\",\n    \"data\": {\n        \"username\": \"hanna\",\n        \"email\": \"nurhanna9928@gmail.com\",\n        \"active\": true,\n        \"myRecipes\": [\n            {\n                \"id\": 1,\n                \"title\": \"hehe\",\n                \"description\": \"lala\",\n                \"ingredients\": \"hmm\",\n                \"instructions\": \"a\",\n                \"path\": \"http://localhost:3000/path-1693044284307-696231696kupuku.png\",\n                \"category\": \"\",\n                \"user_id\": 1,\n                \"createdAt\": \"2023-08-26T10:04:44.000Z\",\n                \"updatedAt\": \"2023-08-26T10:04:44.000Z\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Wrong API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/ap",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"ap"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Wrong API",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/ap",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"ap"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "65"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"41-kQkFFpxTZ6GRg3YD19kTxy3bdEk\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Aug 2023 13:23:56 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"status\": \"Not Found\",\n    \"message\": \"API Not Found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Documentation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Doc",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "3066"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"bfa-yFRZ52OIJnBjEw3Fd7kKQEEMQpM\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Aug 2023 22:48:32 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": \"success\",\n    \"statusCode\": 200,\n    \"message\": \"Get all APIs.\",\n    \"data\": {\n        \"user\": {\n            \"registerUser\": {\n                \"Endpoint\": \"/api/user/register\",\n                \"Method\": \"POST\",\n                \"Request\": {\n                    \"Body\": {\n                        \"username\": \"string\",\n                        \"email\": \"string\",\n                        \"password\": \"string\"\n                    }\n                },\n                \"Response\": {\n                    \"201\": \"Registration successful\",\n                    \"400\": \"Bad request because username already exists\",\n                    \"404\": \"failed to register\",\n                    \"500\": \"Internal Server Error\"\n                },\n                \"Description\": \"Registers a new user\"\n            },\n            \"loginUser\": {\n                \"Endpoint\": \"/api/user/login\",\n                \"Method\": \"POST\",\n                \"Request\": {\n                    \"Body\": {\n                        \"username\": \"string\",\n                        \"password\": \"string\"\n                    }\n                },\n                \"Description\": \"login for user\"\n            },\n            \"getUser\": {\n                \"Endpoint\": \"/api/user\",\n                \"Method\": \"GET\",\n                \"Request\": {\n                    \"Body\": {},\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Response\": {\n                    \"200\": \"retrieve user successfully\",\n                    \"404\": \"user not found\",\n                    \"500\": \"Internal Server Error\"\n                },\n                \"Description\": \"Get user profile based on id in user token\"\n            },\n            \"changePassword\": {\n                \"Endpoint\": \"/api/user/change-password\",\n                \"Method\": \"PUT\",\n                \"Request\": {\n                    \"Body\": {\n                        \"oldPassword\": \"string\",\n                        \"newPassword\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"Changes the user's password if the old password matches.\"\n            },\n            \"sendOtp\": {\n                \"Endpoint\": \"/api/user/otp\",\n                \"Method\": \"POST\",\n                \"Request\": {\n                    \"Body\": {},\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"Send OTP to email for account activation\"\n            },\n            \"verifyAccount\": {\n                \"Endpoint\": \"/api/user/verify\",\n                \"Method\": \"PUT\",\n                \"Request\": {\n                    \"Body\": {\n                        \"otp\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"input otp that user get from email to activate account\"\n            },\n            \"forgotPassword\": {\n                \"Endpoint\": \"/api/user/forgot-password\",\n                \"Method\": \"POST\",\n                \"Request\": {\n                    \"Body\": {\n                        \"email\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"Sends a password reset email to the user's email address.\"\n            },\n            \"resetPassword\": {\n                \"Endpoint\": \"/pi/user/reset-password?token=token\",\n                \"Method\": \"PUT\",\n                \"Request\": {\n                    \"Body\": {\n                        \"email\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"The API sent to the user for password reset containing a token to reset the password \"\n            }\n        },\n        \"recipes\": {\n            \"getRecipe\": {\n                \"Endpoint\": \"/api/recipe\",\n                \"Method\": \"GET\",\n                \"Request\": {\n                    \"Body\": {},\n                    \"Header\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"List of recipes posted by all users\"\n            },\n            \"getMyRecipe\": {\n                \"Endpoint\": \"/api/recipe/my\",\n                \"Method\": \"GET\",\n                \"Request\": {\n                    \"Body\": {},\n                    \"Header\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"List of recipes posted by user logged in based on token\"\n            },\n            \"postRecipe\": {\n                \"Endpoint\": \"api/recipe\",\n                \"Method\": \"POST\",\n                \"Request\": {\n                    \"Body\": {\n                        \"title\": \"string\",\n                        \"description\": \"string\",\n                        \"ingredients\": \"string\",\n                        \"instructions\": \"string\",\n                        \"path\": \"file\",\n                        \"category\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"post new recipe with authentication\"\n            },\n            \"putRecipe\": {\n                \"Endpoint\": \"/api/recipe/:id\",\n                \"Method\": \"PUT\",\n                \"Request\": {\n                    \"Body\": {\n                        \"title\": \"string\",\n                        \"description\": \"string\",\n                        \"ingredients\": \"string\",\n                        \"instructions\": \"string\",\n                        \"path\": \"file\",\n                        \"category\": \"string\"\n                    },\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"The endpoint for editing a users owned post recipe.\"\n            },\n            \"deleteRecipe\": {\n                \"Endpoint\": \"/api/recipe/:id\",\n                \"Method\": \"DELETE\",\n                \"Request\": {\n                    \"Body\": {},\n                    \"Headers\": {\n                        \"accessToken\": \"string\"\n                    }\n                },\n                \"Description\": \"The endpoint for delete user owned post recipe.\"\n            }\n        }\n    }\n}"
+				}
+			]
+		}
+	]
+}
