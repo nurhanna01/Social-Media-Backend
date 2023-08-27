@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import db_test from './db_test.js';
+import db_test from './db_mock.js';
 import recipeRouter from '../routes/recipeRouter.js';
 import userRouter from '../routes/userRouter.js';
 

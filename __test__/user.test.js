@@ -4,8 +4,8 @@
 // It helps to maintain a clean separation between  production and testing environments.
 
 import request from 'supertest';
-import app_test from './app_test.js';
-import { user } from './db_test';
+import app_test from './app_mock.js';
+import { user } from './db_mock.js';
 describe('test', () => {
   beforeAll(async () => {
     try {

@@ -1,6 +1,6 @@
 // NOTES : for unit tests
 // uncomment the following line if you do unit testing with supertest, & comment imprt from db.js
-// import { user, recipe } from '../__test__/db_test.js';
+// import { user, recipe } from '../__test__/db_mock.js';
 import { user, recipe } from '../database/db.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
