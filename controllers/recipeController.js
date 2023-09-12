@@ -3,7 +3,7 @@ import { user } from '../database/db.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const recipeController = {
+const postController = {
   getRecipe: async (req, res) => {
     try {
       const recipes = await recipe.findAll();
@@ -208,4 +208,4 @@ const recipeController = {
   },
 };
 
-export default recipeController;
+export default postController;

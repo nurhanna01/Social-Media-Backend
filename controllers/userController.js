@@ -1,21 +1,20 @@
 // NOTES : for unit tests
 // uncomment the following line if you do unit testing with supertest, & comment imprt from db.js
 // import { user, recipe } from '../__test__/db_mock.js';
-import { user, recipe } from '../database/db.js';
+import { user, post, otp, filedb, friend } from '../database/db.js';
+import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
 import nodemailer from 'nodemailer';
 import randtoken from 'rand-token';
+import hashPassword from '../helper/hashPassword.js';
+import addMinutesToDate from '../helper/addMinutesToDate.js';
+
 dotenv.config();
 const isValidEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailRegex.test(email);
-};
-
-const hashPassword = async (plaintextPassword) => {
-  const hash = await bcrypt.hash(plaintextPassword, 10);
-  return hash;
 };
 
 const comparePassword = async (plaintextPassword, hash) => {
@@ -24,38 +23,351 @@ const comparePassword = async (plaintextPassword, hash) => {
 };
 
 function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '14400s' });
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '144000s' });
 }
 
 const userController = {
-  getUser: async function (req, res) {
+  // getPeople: async function (req, res) {
+  //   try {
+  //     const people = await user.findAll({
+  //       where: {
+  //         id: {
+  //           [Op.not]: req.user.id,
+  //         },
+  //       },
+  //       attributes: [
+  //         'id',
+  //         'username',
+  //         'email',
+  //         'fullname',
+  //         'active',
+  //         'birth',
+  //         'originCity',
+  //         'currentCity',
+  //         'job',
+  //         'shortBio',
+  //         'photo_profile_path',
+  //         'photo_cover_path',
+  //       ],
+  //     });
+  //     if (people) {
+  //       res.status(200).json({
+  //         statusCode: 200,
+  //         status: 'success',
+  //         data: people,
+  //       });
+  //     } else {
+  //       res.status(404).json({
+  //         statusCode: 404,
+  //         status: 'error',
+  //         message: 'People not found',
+  //       });
+  //     }
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       statusCode: 500,
+  //       status: 'error',
+  //       message: 'Internal server error',
+  //       error: error.message,
+  //     });
+  //   }
+  // },
+
+  getPeople: async (req, res) => {
     try {
-      const findUser = await user.findOne({
-        where: { id: req.user.id },
-        attributes: ['username', 'email', 'active'],
-        include: [
-          {
-            model: recipe,
-            as: 'myRecipes',
+      const userId = req.user.id;
+
+      // hilangkan semua teman dari list yg akan ditampilkan
+      const userFriends = await friend.findAll({
+        where: {
+          [Op.or]: [{ user_ask: userId }, { user_receive: userId }],
+          // status: true,
+        },
+      });
+
+      // Ambil ID pengguna yang berteman dengan pengguna yang sedang masuk
+      const friendUserIds = userFriends.map((friendship) => {
+        return friendship.user_ask === userId ? friendship.user_receive : friendship.user_ask;
+      });
+
+      // Ambil semua pengguna yang tidak ada dalam daftar pertemanan
+      const people = await user.findAll({
+        where: {
+          id: {
+            [Op.notIn]: [...friendUserIds, userId], // Hapus ID pengguna yang sedang masuk dan ID teman-teman
           },
+        },
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'fullname',
+          'active',
+          'birth',
+          'originCity',
+          'currentCity',
+          'job',
+          'shortBio',
+          'photo_profile_path',
+          'photo_cover_path',
         ],
       });
 
-      if (findUser) {
-        res.json({
+      if (people) {
+        res.status(200).json({
           statusCode: 200,
           status: 'success',
-          data: findUser,
+          data: people,
         });
       } else {
-        res.json({
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'People not found',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
+
+  getPeopleDetail: async (req, res) => {
+    try {
+      const userId = req.user.id; // ID pengguna yang sedang masuk
+      const targetUserId = req.params.id; // ID pengguna tujuan yang akan dilihat profilnya
+
+      // Ambil data pengguna tujuan
+      const targetUser = await user.findOne({
+        where: { id: targetUserId },
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'fullname',
+          'active',
+          'birth',
+          'originCity',
+          'currentCity',
+          'job',
+          'shortBio',
+          'photo_profile_path',
+          'photo_cover_path',
+        ],
+      });
+
+      if (!targetUser) {
+        return res.status(404).json({
           statusCode: 404,
           status: 'error',
           message: 'User not found',
         });
       }
+
+      // Cek status pertemanan antara pengguna yang sedang masuk dan pengguna tujuan
+      const friendship = await friend.findOne({
+        where: {
+          [Op.or]: [
+            { user_ask: userId, user_receive: targetUserId },
+            { user_ask: targetUserId, user_receive: userId },
+          ],
+        },
+      });
+
+      let friendStatus = 'Not Friend'; // Default status jika bukan teman
+      let friendStatusCode = 0;
+
+      if (friendship) {
+        if (friendship.status === true) {
+          friendStatus = 'Friend';
+          friendStatusCode = 1;
+        } else {
+          if (friendship.user_ask === userId) {
+            friendStatus = 'Friend Request Sent';
+            friendStatusCode = 2;
+          } else {
+            friendStatus = 'Friend Request Received';
+            friendStatusCode = 3;
+          }
+        }
+      }
+
+      res.status(200).json({
+        statusCode: 200,
+        status: 'success',
+        data: {
+          ...targetUser.toJSON(),
+          friendStatus,
+          friendStatusCode,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
+
+  getMyprofile: async function (req, res) {
+    try {
+      const findUser = await user.findOne({
+        where: { id: req.user.id },
+        attributes: [
+          'username',
+          'email',
+          'fullname',
+          'active',
+          'birth',
+          'originCity',
+          'currentCity',
+          'job',
+          'shortBio',
+          'photo_profile_path',
+          'photo_cover_path',
+        ],
+        include: [
+          {
+            model: post,
+            as: 'posts',
+            include: [
+              { model: filedb, as: 'files' },
+              {
+                model: user,
+                as: 'user',
+                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!findUser) {
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'User not found',
+        });
+      }
+
+      // cari teman saya
+      const myFriend = await friend.findAll({
+        where: {
+          [Op.or]: [{ user_ask: req.user.id }, { user_receive: req.user.id }],
+          status: true,
+        },
+      });
+
+      const dataMyFriend = [];
+      for (const friend of myFriend) {
+        const friendId = friend.user_ask === req.user.id ? friend.user_receive : friend.user_ask;
+
+        const friendProfile = await user.findOne({
+          where: {
+            id: friendId,
+          },
+          attributes: [
+            'username',
+            'email',
+            'fullname',
+            'active',
+            'birth',
+            'originCity',
+            'currentCity',
+            'job',
+            'shortBio',
+            'photo_profile_path',
+            'photo_cover_path',
+          ],
+        });
+        if (friendProfile) {
+          dataMyFriend.push(friendProfile);
+        }
+      }
+
+      findUser.dataValues.friends = dataMyFriend;
+
+      res.status(200).json({
+        statusCode: 200,
+        status: 'success',
+        message: 'Success get my profile',
+        data: findUser,
+      });
     } catch (err) {
-      res.json({
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: err.message,
+      });
+    }
+  },
+
+  updateprofile: async function (req, res) {
+    const updatedUserData = {
+      username: req.body.username,
+      email: req.body.email,
+      fullname: req.body.fullname,
+      birth: req.body.birth,
+      originCity: req.body.originCity,
+      currentCity: req.body.currentCity,
+      job: req.body.job,
+      shortBio: req.body.shortBio,
+      // photo_profile_path: photo_profile_path,
+      // photo_cover_path: photo_cover_path,
+    };
+    let photo_profile_path = '';
+    let photo_cover_path = '';
+
+    if (req.files['photo_profile_path']) {
+      photo_profile_path = `${req.protocol}://${req.get('host')}/${req.files['photo_profile_path'][0].filename}`;
+      updatedUserData.photo_profile_path = photo_profile_path;
+    }
+
+    if (req.files['photo_cover_path']) {
+      photo_cover_path = `${req.protocol}://${req.get('host')}/${req.files['photo_cover_path'][0].filename}`;
+      updatedUserData.photo_cover_path = photo_cover_path;
+    }
+
+    try {
+      const userToUpdate = await user.findOne({ where: { id: req.user.id } });
+
+      if (!userToUpdate) {
+        return res.status(404).json({
+          statusCode: 404,
+          status: 'failed',
+          message: 'User not found',
+        });
+      }
+
+      // Anda juga dapat menambahkan logika otorisasi di sini jika diperlukan
+
+      const updatedUser = await user.update(updatedUserData, {
+        where: { id: req.user.id },
+      });
+
+      if (updatedUser[0] === 1) {
+        res.status(200).json({
+          statusCode: 200,
+          status: 'success',
+          message: 'User updated successfully',
+        });
+      } else {
+        res.status(500).json({
+          statusCode: 500,
+          status: 'error',
+          message: 'Failed to update user',
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
         statusCode: 500,
         status: 'error',
         message: 'Internal server error',
@@ -66,8 +378,17 @@ const userController = {
 
   registerUser: async (req, res) => {
     try {
+      if (!req.body.fullname || req.body.fullname.trim() === '') {
+        res.status(400).json({
+          statusCode: 400,
+          status: 'error',
+          message: 'FullName cannot be empty',
+        });
+        return;
+      }
+
       if (!req.body.username || req.body.username.trim() === '') {
-        res.json({
+        res.status(400).json({
           statusCode: 400,
           status: 'error',
           message: 'Username cannot be empty',
@@ -75,8 +396,17 @@ const userController = {
         return;
       }
 
+      if (!req.body.email || req.body.email.trim() === '') {
+        res.status(400).json({
+          statusCode: 400,
+          status: 'error',
+          message: 'Email cannot be empty',
+        });
+        return;
+      }
+
       if (!req.body.password || req.body.password.trim() === '') {
-        res.json({
+        res.status(400).json({
           statusCode: 400,
           status: 'error',
           message: 'password cannot be empty',
@@ -85,7 +415,7 @@ const userController = {
       }
       const findUsername = await user.findOne({ where: { username: req.body.username } });
       if (findUsername) {
-        res.json({
+        res.status(400).json({
           statusCode: 400,
           status: 'error',
           message: 'Username already exists',
@@ -93,7 +423,7 @@ const userController = {
         return;
       }
       if (!isValidEmail(req.body.email)) {
-        res.json({
+        res.status(400).json({
           statusCode: 400,
           status: 'error',
           message: 'Invalid email format',
@@ -102,7 +432,7 @@ const userController = {
       }
       const findEmail = await user.findOne({ where: { email: req.body.email } });
       if (findEmail) {
-        res.json({
+        res.status(400).json({
           statusCode: 400,
           status: 'error',
           message: 'Email already used',
@@ -110,6 +440,7 @@ const userController = {
         return;
       }
       const newUser = {
+        fullname: req.body.fullname,
         username: req.body.username,
         password: await hashPassword(req.body.password),
         email: req.body.email,
@@ -121,21 +452,21 @@ const userController = {
         active: postUser.active,
       };
       if (postUser) {
-        res.json({
+        res.status(201).json({
           statusCode: 201,
           status: 'success',
           message: 'User created successfully',
           data: postUserToReturn,
         });
       } else {
-        res.json({
+        res.status(400).json({
           statusCode: 404,
           status: 'error',
           message: 'Bad Request',
         });
       }
     } catch (err) {
-      res.json({
+      res.status(500).json({
         statusCode: 500,
         status: 'error',
         message: 'Internal server error',
@@ -156,7 +487,7 @@ const userController = {
         };
         if (checkPassword) {
           const token = generateAccessToken({ id: findUser.id });
-          res.json({
+          res.status(200).json({
             status: 'success',
             statusCode: 200,
             message: 'User logged in successfully',
@@ -164,21 +495,21 @@ const userController = {
             token: token,
           });
         } else {
-          res.json({
+          res.status(404).json({
             status: 'error',
             statusCode: 404,
             message: 'Wrong Password',
           });
         }
       } else {
-        res.json({
+        res.status(404).json({
           statusCode: 404,
           status: 'error',
           message: 'Username incorrect',
         });
       }
     } catch (err) {
-      res.json({
+      res.status(500).json({
         statusCode: 500,
         status: 'error',
         message: 'Internal server error',
@@ -189,13 +520,9 @@ const userController = {
 
   sendOtp: async (req, res) => {
     try {
-      // const current = new Date();
-      // const formattedDate = dateTime(current);
-      const findUser = await user.findByPk(req.user.id);
+      const email = req.body.email;
       const transporter = nodemailer.createTransport({
         service: 'gmail',
-        // host: 'smtp.mailtrap.io',
-        // port: 2525,
         auth: {
           user: process.env.EMAIL_ADDRESS,
           pass: process.env.EMAIL_PASSWORD,
@@ -203,43 +530,50 @@ const userController = {
       });
       transporter.verify(function (error, success) {
         if (error) {
-          res.json({
+          res.status(500).json({
             status: 'error',
             statusCode: 500,
             message: 'Internal Server Error',
           });
           return;
         } else {
-          // console.log('Server is ready');
+          console.log('Server is ready');
         }
       });
-      const otp = Math.floor(100000 + Math.random() * 900000);
+      const otpCode = Math.floor(100000 + Math.random() * 900000);
       const mailData = {
-        from: 'nurhanna@mail.com', // sender address
-        to: findUser.email, // list of receivers
+        from: 'nurhanna@mail.com',
+        to: email,
         subject: 'Code Verification for Cullinary Adventures Application',
         html: `<b>Hey there! Hanna here:)</b>
-             <br>This is your OTP verification code ${otp}<br/>
+             <br>This is your OTP verification code ${otpCode}<br/>
              please enter your code in Cullinary Adventures App`,
       };
-      user.update(
-        { otp: otp },
-        {
-          where: {
-            id: req.user.id,
-          },
-        }
-      );
+      console.log(addMinutesToDate(2));
+      const findEmail = await otp.findOne({ where: { email: email } });
+      if (findEmail) {
+        await otp.update(
+          { otp: otpCode, expired: addMinutesToDate(2) },
+          {
+            where: {
+              email,
+            },
+          }
+        );
+      } else {
+        await otp.create({ email, otp: otpCode, expired: addMinutesToDate(2) });
+      }
+
       transporter.sendMail(mailData, function (err, info) {
         if (err) {
-          res.json({
+          res.status(404).json({
             statusCode: 404,
             status: 'error',
             message: 'An error occurred while sending the email',
           });
           return;
         } else {
-          res.json({
+          res.status(200).json({
             statusCode: 200,
             status: 'success',
             message: 'OTP already sent successfully,Please check your email',
@@ -247,7 +581,7 @@ const userController = {
         }
       });
     } catch (err) {
-      res.json({
+      res.status(500).json({
         statusCode: 500,
         status: 'error',
         message: 'Internal server error',
@@ -257,55 +591,55 @@ const userController = {
     }
   },
 
-  verifyAccount: async (req, res) => {
+  verifyEmailAccount: async (req, res) => {
     try {
-      const findUser = await user.findOne({ where: { id: req.user.id } });
-      if (findUser) {
-        if (findUser.otp == req.body.otp) {
-          // check expired otp (should not more than 2 minutes)
-          const currentTime = new Date();
-          const userUpdatedAt = new Date(findUser.updatedAt);
-          const timeDifferenceInMs = currentTime - userUpdatedAt;
-          const timeDifferenceInSeconds = Math.floor(timeDifferenceInMs / 1000);
-          if (timeDifferenceInSeconds > 120) {
-            res.json({
-              statusCode: 400,
-              status: 'Bad Request',
-              message: 'OTP already expired, please request for new OTP',
-            });
-            return;
-          }
-          user.update(
-            { active: true },
-            {
-              where: {
-                id: findUser.id,
-              },
-            }
-          );
-          res.json({
-            statusCode: 200,
-            status: 'success',
-            message: 'Account verified successfully',
-          });
-        } else {
-          res.json({
-            statusCode: 404,
-            status: 'Not Found',
-            message: 'Invalid OTP',
-          });
-        }
-      } else {
-        res.json({
-          status: 'Not Found',
+      const findEmail = await otp.findOne({ where: { email: req.body.email } });
+
+      if (!findEmail) {
+        return res.status(404).json({
           statusCode: 404,
+          status: 'Not Found',
           message: 'User not found',
         });
       }
+
+      if (findEmail.otp != req.body.otp) {
+        console.log(findEmail.otp, req.body.otp);
+        return res.status(404).json({
+          statusCode: 404,
+          status: 'Not Found',
+          message: 'Invalid OTP',
+        });
+      }
+
+      const currentTime = new Date();
+      if (findEmail.expired < currentTime) {
+        return res.status(400).json({
+          statusCode: 400,
+          status: 'Bad Request',
+          message: 'OTP already expired, please request a new OTP',
+        });
+      }
+
+      const activeEmail = await user.update(
+        { active: true },
+        {
+          where: { email: req.body.email },
+        }
+      );
+      if (activeEmail == 1) {
+        findEmail.destroy();
+      }
+
+      return res.status(200).json({
+        statusCode: 200,
+        status: 'Success',
+        message: 'Account verified successfully',
+      });
     } catch (err) {
-      res.json({
+      return res.status(500).json({
         statusCode: 500,
-        status: 'error',
+        status: 'Error',
         message: 'Internal server error',
         error: err.message,
       });

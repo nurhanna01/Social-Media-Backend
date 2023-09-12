@@ -2,6 +2,7 @@ import express from 'express';
 import userController from '../controllers/userController.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import upload from '../helper/multerHelper.js';
 dotenv.config();
 
 const userRouter = express.Router();
@@ -40,11 +41,22 @@ function authenticateToken(req, res, next) {
     });
   }
 }
-userRouter.get('/', authenticateToken, userController.getUser);
+userRouter.get('/', authenticateToken, userController.getMyprofile);
+userRouter.get('/all', authenticateToken, userController.getPeople);
+userRouter.get('/detail/:id', authenticateToken, userController.getPeopleDetail);
+userRouter.put(
+  '/',
+  authenticateToken,
+  upload.fields([
+    { name: 'photo_profile_path', maxCount: 1 },
+    { name: 'photo_cover_path', maxCount: 1 },
+  ]),
+  userController.updateprofile
+);
 userRouter.post('/register', userController.registerUser);
 userRouter.post('/login', userController.loginUser);
-userRouter.post('/otp', authenticateToken, userController.sendOtp);
-userRouter.put('/verify', authenticateToken, userController.verifyAccount);
+userRouter.post('/otp', userController.sendOtp);
+userRouter.post('/verify', userController.verifyEmailAccount);
 userRouter.put('/change-password', authenticateToken, userController.changePassword);
 userRouter.post('/forgot-password', userController.forgotPassword);
 userRouter.put('/reset-password', userController.resetPassword);

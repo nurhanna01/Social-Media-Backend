@@ -5,11 +5,6 @@ const userModel = (sequelize) =>
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: {
-        notNull: {
-          msg: 'Please enter your username',
-        },
-      },
     },
     password: {
       type: DataTypes.STRING,
@@ -24,11 +19,35 @@ const userModel = (sequelize) =>
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    otp: {
-      type: DataTypes.INTEGER,
+    fullname: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
-    token: {
+    birth: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    originCity: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    currentCity: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    job: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    shortBio: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    photo_profile_path: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    photo_cover_path: {
       type: DataTypes.STRING,
       allowNull: true,
     },

@@ -4,6 +4,8 @@ import db from './database/db.js';
 import recipeRouter from './routes/recipeRouter.js';
 import userRouter from './routes/userRouter.js';
 import documentation from './documentation/documentation.js';
+import postRouter from './routes/postRouter.js';
+import friendRouter from './routes/friendRouter.js';
 
 const port = process.env.PORT || 3000;
 
@@ -23,11 +25,13 @@ db.sync({ force: false })
 app.use('/', documentation);
 app.use('/api/recipe', recipeRouter);
 app.use('/api/user', userRouter);
+app.use('/api/post', postRouter);
+app.use('/api/friends', friendRouter);
 
 app.use(express.static('public/images'));
 
 app.all('*', (req, res) => {
-  res.json({
+  res.status(404).json({
     statusCode: 404,
     status: 'Not Found',
     message: 'API Not Found',
