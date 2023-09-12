@@ -136,10 +136,88 @@ const userController = {
     }
   },
 
+  // getPeopleDetail: async (req, res) => {
+  //   try {
+  //     const userId = req.user.id; // ID pengguna yang sedang masuk
+  //     const targetUserId = req.params.id; // ID pengguna tujuan yang akan dilihat profilnya
+
+  //     // Ambil data pengguna tujuan
+  //     const targetUser = await user.findOne({
+  //       where: { id: targetUserId },
+  //       attributes: [
+  //         'id',
+  //         'username',
+  //         'email',
+  //         'fullname',
+  //         'active',
+  //         'birth',
+  //         'originCity',
+  //         'currentCity',
+  //         'job',
+  //         'shortBio',
+  //         'photo_profile_path',
+  //         'photo_cover_path',
+  //       ],
+  //     });
+
+  //     if (!targetUser) {
+  //       return res.status(404).json({
+  //         statusCode: 404,
+  //         status: 'error',
+  //         message: 'User not found',
+  //       });
+  //     }
+
+  //     // Cek status pertemanan antara pengguna yang sedang masuk dan pengguna tujuan
+  //     const friendship = await friend.findOne({
+  //       where: {
+  //         [Op.or]: [
+  //           { user_ask: userId, user_receive: targetUserId },
+  //           { user_ask: targetUserId, user_receive: userId },
+  //         ],
+  //       },
+  //     });
+
+  //     let friendStatus = 'Not Friend'; // Default status jika bukan teman
+  //     let friendStatusCode = 0;
+
+  //     if (friendship) {
+  //       if (friendship.status === true) {
+  //         friendStatus = 'Friend';
+  //         friendStatusCode = 1;
+  //       } else {
+  //         if (friendship.user_ask === userId) {
+  //           friendStatus = 'Friend Request Sent';
+  //           friendStatusCode = 2;
+  //         } else {
+  //           friendStatus = 'Friend Request Received';
+  //           friendStatusCode = 3;
+  //         }
+  //       }
+  //     }
+
+  //     res.status(200).json({
+  //       statusCode: 200,
+  //       status: 'success',
+  //       data: {
+  //         ...targetUser.toJSON(),
+  //         friendStatus,
+  //         friendStatusCode,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       statusCode: 500,
+  //       status: 'error',
+  //       message: 'Internal server error',
+  //       error: error.message,
+  //     });
+  //   }
+  // },
+
   getPeopleDetail: async (req, res) => {
     try {
-      const userId = req.user.id; // ID pengguna yang sedang masuk
-      const targetUserId = req.params.id; // ID pengguna tujuan yang akan dilihat profilnya
+      const targetUserId = req.params.id;
 
       // Ambil data pengguna tujuan
       const targetUser = await user.findOne({
@@ -158,6 +236,20 @@ const userController = {
           'photo_profile_path',
           'photo_cover_path',
         ],
+        include: [
+          {
+            model: post,
+            as: 'posts',
+            include: [
+              { model: filedb, as: 'files' },
+              {
+                model: user,
+                as: 'user',
+                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              },
+            ],
+          },
+        ],
       });
 
       if (!targetUser) {
@@ -167,13 +259,50 @@ const userController = {
           message: 'User not found',
         });
       }
+      // cari teman dia
+      const theirFriend = await friend.findAll({
+        where: {
+          [Op.or]: [{ user_ask: targetUserId }, { user_receive: targetUserId }],
+          status: true,
+        },
+      });
+      console.log(theirFriend, 'a');
+
+      const dataFriends = [];
+      if (theirFriend.length > 0) {
+        for (const friend of theirFriend) {
+          const friendId = friend.user_ask === targetUserId ? friend.user_receive : friend.user_ask;
+
+          const friendProfile = await user.findOne({
+            where: { id: friendId },
+            attributes: [
+              'username',
+              'email',
+              'fullname',
+              'active',
+              'birth',
+              'originCity',
+              'currentCity',
+              'job',
+              'shortBio',
+              'photo_profile_path',
+              'photo_cover_path',
+            ],
+          });
+          if (friendProfile) {
+            dataFriends.push(friendProfile);
+          }
+        }
+      }
+
+      targetUser.dataValues.friends = dataFriends;
 
       // Cek status pertemanan antara pengguna yang sedang masuk dan pengguna tujuan
       const friendship = await friend.findOne({
         where: {
           [Op.or]: [
-            { user_ask: userId, user_receive: targetUserId },
-            { user_ask: targetUserId, user_receive: userId },
+            { user_ask: req.user.id, user_receive: targetUserId },
+            { user_ask: targetUserId, user_receive: req.user.id },
           ],
         },
       });
@@ -186,11 +315,11 @@ const userController = {
           friendStatus = 'Friend';
           friendStatusCode = 1;
         } else {
-          if (friendship.user_ask === userId) {
-            friendStatus = 'Friend Request Sent';
+          if (friendship.user_ask === req.user.id) {
+            friendStatus = 'Permintaan pertemanan sudah terkirim';
             friendStatusCode = 2;
           } else {
-            friendStatus = 'Friend Request Received';
+            friendStatus = 'Terima pertemanan';
             friendStatusCode = 3;
           }
         }
