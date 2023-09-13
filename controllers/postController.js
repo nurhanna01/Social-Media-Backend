@@ -35,6 +35,7 @@ const postController = {
           status: 'error',
           message: 'Post failed to be created',
         });
+        return;
       }
     } catch (err) {
       res.status(500).json({
@@ -71,6 +72,7 @@ const postController = {
           status: 'error',
           message: 'No Post found',
         });
+        return;
       }
     } catch (err) {
       res.status(500).json({

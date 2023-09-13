@@ -62,6 +62,7 @@ const friendController = {
           status: 'error',
           message: 'Friends not found',
         });
+        return;
       }
     } catch (error) {
       res.status(500).json({

@@ -44,6 +44,7 @@ function authenticateToken(req, res, next) {
 userRouter.get('/', authenticateToken, userController.getMyprofile);
 userRouter.get('/people', authenticateToken, userController.getUnfriendPeople);
 userRouter.get('/all', authenticateToken, userController.getUsers);
+userRouter.get('/search', authenticateToken, userController.searchUsers);
 userRouter.get('/detail/:id', authenticateToken, userController.getPeopleDetail);
 userRouter.put(
   '/',

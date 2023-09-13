@@ -6,6 +6,7 @@ import userRouter from './routes/userRouter.js';
 import documentation from './documentation/documentation.js';
 import postRouter from './routes/postRouter.js';
 import friendRouter from './routes/friendRouter.js';
+import likeRouter from './routes/likeRouter.js';
 
 const port = process.env.PORT || 3000;
 

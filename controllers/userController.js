@@ -1,5 +1,5 @@
 import { user, post, otp, filedb, friend } from '../database/db.js';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt, { hash } from 'bcrypt';
@@ -128,6 +128,65 @@ const userController = {
           status: 'error',
           message: 'People not found',
         });
+      }
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
+
+  // cari user
+  searchUsers: async (req, res) => {
+    try {
+      const userId = req.user.id;
+      const { query, limit } = req.query;
+
+      const whereCondition = {
+        id: {
+          [Op.notIn]: [userId],
+        },
+      };
+
+      const users = await user.findAll({
+        where: {
+          fullname: {
+            [Op.like]: Sequelize.fn('LOWER', `%${query}%`),
+          },
+        },
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'fullname',
+          'active',
+          'birth',
+          'originCity',
+          'currentCity',
+          'job',
+          'shortBio',
+          'photo_profile_path',
+          'photo_cover_path',
+        ],
+        limit: limit ? parseInt(limit) : undefined, // Gunakan limit jika disediakan dalam query
+      });
+
+      if (users.length > 0) {
+        res.status(200).json({
+          statusCode: 200,
+          status: 'success',
+          data: users,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'People not found',
+        });
+        return;
       }
     } catch (error) {
       res.status(500).json({

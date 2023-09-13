@@ -1,18 +1,15 @@
 import express from 'express';
-import postController from '../controllers/postController.js';
 import likeController from '../controllers/likeController.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import upload from '../helper/multerHelper.js';
 dotenv.config();
 
-const postRouter = express.Router();
+const likeRouter = express.Router();
 
 function authenticateToken(req, res, next) {
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    // console.log(token, 'token');
     if (token == null)
       return res.status(402).json({
         statusCode: 402,
@@ -43,8 +40,6 @@ function authenticateToken(req, res, next) {
     });
   }
 }
-postRouter.post('/', authenticateToken, upload.array('path'), postController.post);
-postRouter.get('/', authenticateToken, postController.getPost);
-postRouter.post('/like', authenticateToken, likeController.doLike);
+likeRouter.post('/', authenticateToken, likeController.doLike);
 
-export default postRouter;
+export default likeRouter;
