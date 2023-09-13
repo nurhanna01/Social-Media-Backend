@@ -1,4 +1,4 @@
-import { post, filedb } from '../database/db.js';
+import { post, filedb, like_db } from '../database/db.js';
 import { user } from '../database/db.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -56,15 +56,28 @@ const postController = {
             as: 'user',
             attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
           },
+          {
+            model: like_db,
+            as: 'likes',
+            // where: { user_id: req.user.id },
+          },
         ],
         order: [['createdAt', 'DESC']],
+      });
+
+      const postStatus = getPost.map((post) => {
+        const isLike = post.likes.some((like) => like.user_id === req.user.id);
+        return {
+          ...post.toJSON(),
+          isLike: isLike,
+        };
       });
       if (getPost) {
         res.status(200).json({
           statusCode: 200,
           status: 'success',
           message: 'Post retrieved successfully',
-          data: getPost,
+          data: postStatus,
         });
       } else {
         res.status(404).json({

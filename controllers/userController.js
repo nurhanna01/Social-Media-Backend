@@ -1,4 +1,4 @@
-import { user, post, otp, filedb, friend } from '../database/db.js';
+import { user, post, otp, filedb, friend, like_db } from '../database/db.js';
 import { Op, Sequelize } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -230,6 +230,10 @@ const userController = {
                 as: 'user',
                 attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
               },
+              {
+                model: like_db,
+                as: 'likes',
+              },
             ],
           },
         ],
@@ -242,6 +246,11 @@ const userController = {
           message: 'User not found',
         });
       }
+      // cek postingan orang ini, status like dia dengan saya
+      targetUser.posts = targetUser.posts.map((post) => {
+        const isLike = post.likes.some((like) => like.user_id === req.user.id);
+        post.dataValues.isLike = isLike;
+      });
       // cari teman dia
       const theirFriend = await friend.findAll({
         where: {
@@ -249,7 +258,6 @@ const userController = {
           status: true,
         },
       });
-      console.log(theirFriend, 'a');
 
       const dataFriends = [];
       if (theirFriend.length > 0) {
@@ -356,6 +364,10 @@ const userController = {
                 as: 'user',
                 attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
               },
+              {
+                model: like_db,
+                as: 'likes',
+              },
             ],
             order: [['createdAt', 'DESC']],
           },
@@ -407,6 +419,11 @@ const userController = {
       }
 
       findUser.dataValues.friends = dataMyFriend;
+
+      findUser.posts = findUser.posts.map((post) => {
+        const isLike = post.likes.some((like) => like.user_id === req.user.id);
+        post.dataValues.isLike = isLike;
+      });
 
       res.status(200).json({
         statusCode: 200,
@@ -481,7 +498,6 @@ const userController = {
         });
       }
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         statusCode: 500,
         status: 'error',
@@ -664,7 +680,6 @@ const userController = {
              <br>This is your OTP verification code ${otpCode}<br/>
              please enter your code in Cullinary Adventures App`,
       };
-      console.log(addMinutesToDate(2));
       const findEmail = await otp.findOne({ where: { email: email } });
       if (findEmail) {
         await otp.update(
@@ -719,7 +734,6 @@ const userController = {
       }
 
       if (findEmail.otp != req.body.otp) {
-        console.log(findEmail.otp, req.body.otp);
         return res.status(404).json({
           statusCode: 404,
           status: 'Not Found',

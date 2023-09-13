@@ -13,7 +13,7 @@ const likeController = {
         return;
       }
       if (!like) {
-        findLike = await like_db.findOne({ where: { post_id: req.body.post_id, user_id: req.body.user_id } });
+        const findLike = await like_db.findOne({ where: { post_id: req.body.post_id, user_id: req.user.id } });
         findLike.destroy();
         res.status(200).json({
           statusCode: 200,
@@ -22,7 +22,7 @@ const likeController = {
         });
         return;
       }
-      const likeToDb = await like_db.create({ post_id: req.body.post_id, user_id: req.body.user_id });
+      const likeToDb = await like_db.create({ post_id: req.body.post_id, user_id: req.user.id });
       if (likeToDb) {
         res.status(200).json({
           statusCode: 200,
