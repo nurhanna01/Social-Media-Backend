@@ -1,6 +1,3 @@
-// NOTES : for unit tests
-// uncomment the following line if you do unit testing with supertest, & comment imprt from db.js
-// import { user, recipe } from '../__test__/db_mock.js';
 import { user, post, otp, filedb, friend } from '../database/db.js';
 import { Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
@@ -27,53 +24,8 @@ function generateAccessToken(payload) {
 }
 
 const userController = {
-  // getPeople: async function (req, res) {
-  //   try {
-  //     const people = await user.findAll({
-  //       where: {
-  //         id: {
-  //           [Op.not]: req.user.id,
-  //         },
-  //       },
-  //       attributes: [
-  //         'id',
-  //         'username',
-  //         'email',
-  //         'fullname',
-  //         'active',
-  //         'birth',
-  //         'originCity',
-  //         'currentCity',
-  //         'job',
-  //         'shortBio',
-  //         'photo_profile_path',
-  //         'photo_cover_path',
-  //       ],
-  //     });
-  //     if (people) {
-  //       res.status(200).json({
-  //         statusCode: 200,
-  //         status: 'success',
-  //         data: people,
-  //       });
-  //     } else {
-  //       res.status(404).json({
-  //         statusCode: 404,
-  //         status: 'error',
-  //         message: 'People not found',
-  //       });
-  //     }
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       statusCode: 500,
-  //       status: 'error',
-  //       message: 'Internal server error',
-  //       error: error.message,
-  //     });
-  //   }
-  // },
-
-  getPeople: async (req, res) => {
+  // orang yang belum berteman dengan saya
+  getUnfriendPeople: async (req, res) => {
     try {
       const userId = req.user.id;
 
@@ -136,84 +88,56 @@ const userController = {
     }
   },
 
-  // getPeopleDetail: async (req, res) => {
-  //   try {
-  //     const userId = req.user.id; // ID pengguna yang sedang masuk
-  //     const targetUserId = req.params.id; // ID pengguna tujuan yang akan dilihat profilnya
+  // semua orang
+  getUsers: async (req, res) => {
+    try {
+      const userId = req.user.id;
 
-  //     // Ambil data pengguna tujuan
-  //     const targetUser = await user.findOne({
-  //       where: { id: targetUserId },
-  //       attributes: [
-  //         'id',
-  //         'username',
-  //         'email',
-  //         'fullname',
-  //         'active',
-  //         'birth',
-  //         'originCity',
-  //         'currentCity',
-  //         'job',
-  //         'shortBio',
-  //         'photo_profile_path',
-  //         'photo_cover_path',
-  //       ],
-  //     });
+      // Ambil semua pengguna yang tidak ada dalam daftar pertemanan
+      const users = await user.findAll({
+        where: {
+          id: {
+            [Op.notIn]: [userId],
+          },
+        },
+        attributes: [
+          'id',
+          'username',
+          'email',
+          'fullname',
+          'active',
+          'birth',
+          'originCity',
+          'currentCity',
+          'job',
+          'shortBio',
+          'photo_profile_path',
+          'photo_cover_path',
+        ],
+      });
 
-  //     if (!targetUser) {
-  //       return res.status(404).json({
-  //         statusCode: 404,
-  //         status: 'error',
-  //         message: 'User not found',
-  //       });
-  //     }
-
-  //     // Cek status pertemanan antara pengguna yang sedang masuk dan pengguna tujuan
-  //     const friendship = await friend.findOne({
-  //       where: {
-  //         [Op.or]: [
-  //           { user_ask: userId, user_receive: targetUserId },
-  //           { user_ask: targetUserId, user_receive: userId },
-  //         ],
-  //       },
-  //     });
-
-  //     let friendStatus = 'Not Friend'; // Default status jika bukan teman
-  //     let friendStatusCode = 0;
-
-  //     if (friendship) {
-  //       if (friendship.status === true) {
-  //         friendStatus = 'Friend';
-  //         friendStatusCode = 1;
-  //       } else {
-  //         if (friendship.user_ask === userId) {
-  //           friendStatus = 'Friend Request Sent';
-  //           friendStatusCode = 2;
-  //         } else {
-  //           friendStatus = 'Friend Request Received';
-  //           friendStatusCode = 3;
-  //         }
-  //       }
-  //     }
-
-  //     res.status(200).json({
-  //       statusCode: 200,
-  //       status: 'success',
-  //       data: {
-  //         ...targetUser.toJSON(),
-  //         friendStatus,
-  //         friendStatusCode,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       statusCode: 500,
-  //       status: 'error',
-  //       message: 'Internal server error',
-  //       error: error.message,
-  //     });
-  //   }
-  // },
+      if (users) {
+        res.status(200).json({
+          statusCode: 200,
+          status: 'success',
+          data: users,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'People not found',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
 
   getPeopleDetail: async (req, res) => {
     try {
@@ -349,6 +273,7 @@ const userController = {
       const findUser = await user.findOne({
         where: { id: req.user.id },
         attributes: [
+          'id',
           'username',
           'email',
           'fullname',
@@ -373,6 +298,7 @@ const userController = {
                 attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
               },
             ],
+            order: [['createdAt', 'DESC']],
           },
         ],
       });
@@ -402,6 +328,7 @@ const userController = {
             id: friendId,
           },
           attributes: [
+            'id',
             'username',
             'email',
             'fullname',
