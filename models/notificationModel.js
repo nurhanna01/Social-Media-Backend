@@ -1,7 +1,11 @@
 import { DataTypes } from 'sequelize';
 const notificationModel = (sequelize) =>
   sequelize.define('notifications', {
-    user_id: {
+    user_sender: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    user_receiver: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

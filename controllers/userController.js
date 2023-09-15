@@ -656,7 +656,7 @@ const userController = {
         });
       } else {
         res.status(400).json({
-          statusCode: 404,
+          statusCode: 400,
           status: 'error',
           message: 'Bad Request',
         });

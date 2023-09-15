@@ -7,6 +7,7 @@ import documentation from './documentation/documentation.js';
 import postRouter from './routes/postRouter.js';
 import friendRouter from './routes/friendRouter.js';
 import likeRouter from './routes/likeRouter.js';
+import notificationRouter from './routes/notificationRouter.js';
 
 const port = process.env.PORT || 3000;
 
@@ -28,6 +29,7 @@ app.use('/api/recipe', recipeRouter);
 app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 app.use('/api/friends', friendRouter);
+app.use('/api/notifications', notificationRouter);
 
 app.use(express.static('public/images'));
 

@@ -69,4 +69,10 @@ comment_db.belongsTo(user, {
   as: 'user',
 });
 
+// relasi notif user
+notification_db.belongsTo(user, {
+  foreignKey: 'user_sender',
+  as: 'senderUser',
+});
+
 export default db;
