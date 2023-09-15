@@ -391,7 +391,7 @@ const userController = {
               {
                 model: user,
                 as: 'user',
-                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+                attributes: ['id', 'username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
               },
               {
                 model: like_db,

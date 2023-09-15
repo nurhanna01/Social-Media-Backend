@@ -47,6 +47,7 @@ function authenticateToken(req, res, next) {
 postRouter.post('/', authenticateToken, upload.array('path'), postController.post);
 postRouter.get('/', authenticateToken, postController.getPost);
 postRouter.get('/:id', authenticateToken, postController.detailPost);
+postRouter.delete('/:id', authenticateToken, postController.deletePost);
 postRouter.post('/like', authenticateToken, likeController.doLike);
 postRouter.post('/comment', authenticateToken, commentController.createComment);
 postRouter.delete('/comment/:id', authenticateToken, commentController.destroyComment);
