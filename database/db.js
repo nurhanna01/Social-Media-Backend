@@ -7,6 +7,8 @@ import postModel from '../models/postModel.js';
 import filesModel from '../models/fileModel.js';
 import friendModel from '../models/friendModel.js';
 import likeModel from '../models/likeModel.js';
+import commentModel from '../models/commentModel.js';
+import notificationModel from '../models/notificationModel.js';
 
 const db = new Sequelize(database.database, database.user, database.password, {
   host: database.host,
@@ -26,6 +28,9 @@ export const post = postModel(db);
 export const filedb = filesModel(db);
 export const friend = friendModel(db);
 export const like_db = likeModel(db);
+export const comment_db = commentModel(db);
+export const notification_db = notificationModel(db);
+
 // Define associations
 user.hasMany(recipe, { foreignKey: 'user_id', as: 'myRecipes' });
 recipe.belongsTo(user, { foreignKey: 'user_id', as: 'user' });
@@ -56,5 +61,12 @@ friend.belongsTo(user, {
 
 post.hasMany(like_db, { foreignKey: 'post_id', as: 'likes' });
 user.hasMany(like_db, { foreignKey: 'user_id', as: 'userLikes' });
+
+post.hasMany(comment_db, { foreignKey: 'post_id', as: 'comments' });
+
+comment_db.belongsTo(user, {
+  foreignKey: 'user_id',
+  as: 'user',
+});
 
 export default db;

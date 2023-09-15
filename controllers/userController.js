@@ -1,4 +1,4 @@
-import { user, post, otp, filedb, friend, like_db } from '../database/db.js';
+import { user, post, otp, filedb, friend, like_db, comment_db } from '../database/db.js';
 import { Op, Sequelize } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -35,6 +35,8 @@ const userController = {
           [Op.or]: [{ user_ask: userId }, { user_receive: userId }],
           // status: true,
         },
+        order: Sequelize.literal('RAND()'), // Menggunakan fungsi SQL RAND() untuk pengacakan
+        limit: 100,
       });
 
       // Ambil ID pengguna yang berteman dengan pengguna yang sedang masuk
@@ -99,6 +101,8 @@ const userController = {
           id: {
             [Op.notIn]: [userId],
           },
+          // order: Sequelize.literal('RAND()'), // Menggunakan fungsi SQL RAND() untuk pengacakan
+          // limit: 100,
         },
         attributes: [
           'id',
@@ -246,6 +250,31 @@ const userController = {
           message: 'User not found',
         });
       }
+      // supaya comment di masing2 post order desc karena comment tidak langsung ke post.
+      const postsWithComments = await Promise.all(
+        targetUser.posts.map(async (post) => {
+          const comments = await comment_db.findAll({
+            where: {
+              post_id: post.id,
+            },
+            include: [
+              {
+                model: user,
+                as: 'user',
+                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              },
+            ],
+            order: [['createdAt', 'DESC']], // Urutan komentar berdasarkan createdAt
+          });
+
+          post.dataValues.comments = comments;
+          return post;
+        })
+      );
+
+      // Setelah mendapatkan semua komentar, masukkan hasilnya kembali ke findUser
+      targetUser.posts = postsWithComments;
+
       // cek postingan orang ini, status like dia dengan saya
       targetUser.posts = targetUser.posts.map((post) => {
         const isLike = post.likes.some((like) => like.user_id === req.user.id);
@@ -368,10 +397,22 @@ const userController = {
                 model: like_db,
                 as: 'likes',
               },
+              // {
+              //   model: comment_db,
+              //   as: 'comments',
+
+              //   include: [
+              //     {
+              //       model: user,
+              //       as: 'user',
+              //       attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              //     },
+              //   ],
+              // },
             ],
-            order: [['createdAt', 'DESC']],
           },
         ],
+        order: [[post, 'createdAt', 'DESC']],
       });
 
       if (!findUser) {
@@ -381,6 +422,30 @@ const userController = {
           message: 'User not found',
         });
       }
+      // dapatkan komen berururtan untuk masing2 post secara terpisah dengan urutan yang smaa
+      const postsWithComments = await Promise.all(
+        findUser.posts.map(async (post) => {
+          const comments = await comment_db.findAll({
+            where: {
+              post_id: post.id,
+            },
+            include: [
+              {
+                model: user,
+                as: 'user',
+                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              },
+            ],
+            order: [['createdAt', 'DESC']], // Urutan komentar berdasarkan createdAt
+          });
+
+          post.dataValues.comments = comments;
+          return post;
+        })
+      );
+
+      // Setelah mendapatkan semua komentar, masukkan hasilnya kembali ke findUser
+      findUser.posts = postsWithComments;
 
       // cari teman saya
       const myFriend = await friend.findAll({

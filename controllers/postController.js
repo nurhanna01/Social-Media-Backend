@@ -1,4 +1,4 @@
-import { post, filedb, like_db } from '../database/db.js';
+import { post, filedb, like_db, comment_db } from '../database/db.js';
 import { user } from '../database/db.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -59,10 +59,24 @@ const postController = {
           {
             model: like_db,
             as: 'likes',
-            // where: { user_id: req.user.id },
+          },
+          {
+            model: comment_db,
+            as: 'comments',
+
+            include: [
+              {
+                model: user,
+                as: 'user',
+                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+              },
+            ],
           },
         ],
-        order: [['createdAt', 'DESC']],
+        order: [
+          ['createdAt', 'DESC'],
+          [comment_db, 'createdAt', 'DESC'],
+        ],
       });
 
       const postStatus = getPost.map((post) => {
@@ -93,6 +107,56 @@ const postController = {
         status: 'error',
         message: 'Internal server error',
         error: err,
+      });
+    }
+  },
+  detailPost: async (req, res) => {
+    try {
+      const detail = await post.findOne({
+        where: { id: req.params.id },
+        include: [
+          { model: filedb, as: 'files' },
+          {
+            model: user,
+            as: 'user',
+            attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+          },
+          {
+            model: like_db,
+            as: 'likes',
+          },
+          {
+            model: comment_db,
+            as: 'comments',
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const isLike = detail.likes.some((like) => like.user_id === req.user.id);
+      detail.dataValues.isLike = isLike;
+
+      if (detail) {
+        res.status(200).json({
+          statusCode: 200,
+          status: 'success',
+          message: 'Post retrieved successfully',
+          data: detail,
+        });
+      } else {
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'No Post found',
+        });
+        return;
+      }
+    } catch (err) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: err.message,
       });
     }
   },

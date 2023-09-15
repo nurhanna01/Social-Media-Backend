@@ -4,6 +4,7 @@ import likeController from '../controllers/likeController.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import upload from '../helper/multerHelper.js';
+import commentController from '../controllers/commentController.js';
 dotenv.config();
 
 const postRouter = express.Router();
@@ -45,6 +46,9 @@ function authenticateToken(req, res, next) {
 }
 postRouter.post('/', authenticateToken, upload.array('path'), postController.post);
 postRouter.get('/', authenticateToken, postController.getPost);
+postRouter.get('/:id', authenticateToken, postController.detailPost);
 postRouter.post('/like', authenticateToken, likeController.doLike);
+postRouter.post('/comment', authenticateToken, commentController.createComment);
+postRouter.delete('/comment/:id', authenticateToken, commentController.destroyComment);
 
 export default postRouter;
