@@ -66,5 +66,31 @@ const notificationController = {
       });
     }
   },
+  readNotification: async (req, res) => {
+    try {
+      const findNotification = await notification_db.findOne({ where: { id: req.params.id } });
+      if (!findNotification) {
+        res.status(404).json({
+          statusCode: 404,
+          status: 'error',
+          message: 'Notification not found',
+        });
+        return;
+      }
+      await notification_db.update({ isSeen: true }, { where: { id: req.params.id } });
+      res.status(200).json({
+        statusCode: 200,
+        status: 'success',
+        message: 'Read notification were updated successfully',
+      });
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
 };
 export default notificationController;

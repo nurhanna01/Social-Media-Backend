@@ -42,5 +42,6 @@ function authenticateToken(req, res, next) {
 }
 notificationRouter.get('/', authenticateToken, notificationController.getNotifications);
 notificationRouter.post('/', authenticateToken, notificationController.createNotifications);
+notificationRouter.put('/:id', authenticateToken, notificationController.readNotification);
 
 export default notificationRouter;
