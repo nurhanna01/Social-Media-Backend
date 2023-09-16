@@ -78,10 +78,35 @@ const notificationController = {
         return;
       }
       await notification_db.update({ isSeen: true }, { where: { id: req.params.id } });
+      const dataToReturn = await notification_db.findAll({ where: { user_receiver: req.user.id } });
       res.status(200).json({
         statusCode: 200,
         status: 'success',
         message: 'Read notification were updated successfully',
+        data: dataToReturn,
+      });
+    } catch (error) {
+      res.status(500).json({
+        statusCode: 500,
+        status: 'error',
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  },
+
+  readAllUnreadNotifications: async (req, res) => {
+    try {
+      const unreadNotifications = await notification_db.findAll({
+        where: { user_receiver: req.user.id, isSeen: false },
+      });
+      await notification_db.update({ isSeen: true }, { where: { user_receiver: req.user.id, isSeen: false } });
+
+      res.status(200).json({
+        statusCode: 200,
+        status: 'success',
+        message: 'All unread notifications have been marked as read successfully',
+        data: unreadNotifications,
       });
     } catch (error) {
       res.status(500).json({
