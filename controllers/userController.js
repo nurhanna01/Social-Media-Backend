@@ -1,12 +1,21 @@
-import { user, post, otp, filedb, friend, like_db, comment_db } from '../database/db.js';
-import { Op, Sequelize } from 'sequelize';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import bcrypt, { hash } from 'bcrypt';
-import nodemailer from 'nodemailer';
-import randtoken from 'rand-token';
-import hashPassword from '../helper/hashPassword.js';
-import addMinutesToDate from '../helper/addMinutesToDate.js';
+import {
+  user,
+  post,
+  otp,
+  filedb,
+  friend,
+  like_db,
+  comment_db,
+  resetPassword_db,
+} from "../database/db.js";
+import { Op, Sequelize } from "sequelize";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import bcrypt, { hash } from "bcrypt";
+import nodemailer from "nodemailer";
+import randtoken from "rand-token";
+import hashPassword from "../helper/hashPassword.js";
+import addMinutesToDate from "../helper/addMinutesToDate.js";
 
 dotenv.config();
 const isValidEmail = (email) => {
@@ -20,7 +29,7 @@ const comparePassword = async (plaintextPassword, hash) => {
 };
 
 function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: '144000s' });
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "144000s" });
 }
 
 const userController = {
@@ -35,13 +44,15 @@ const userController = {
           [Op.or]: [{ user_ask: userId }, { user_receive: userId }],
           // status: true,
         },
-        order: Sequelize.literal('RAND()'), // Menggunakan fungsi SQL RAND() untuk pengacakan
+        order: Sequelize.literal("RAND()"), // Menggunakan fungsi SQL RAND() untuk pengacakan
         limit: 100,
       });
 
       // Ambil ID pengguna yang berteman dengan pengguna yang sedang masuk
       const friendUserIds = userFriends.map((friendship) => {
-        return friendship.user_ask === userId ? friendship.user_receive : friendship.user_ask;
+        return friendship.user_ask === userId
+          ? friendship.user_receive
+          : friendship.user_ask;
       });
 
       // Ambil semua pengguna yang tidak ada dalam daftar pertemanan
@@ -52,39 +63,39 @@ const userController = {
           },
         },
         attributes: [
-          'id',
-          'username',
-          'email',
-          'fullname',
-          'active',
-          'birth',
-          'originCity',
-          'currentCity',
-          'job',
-          'shortBio',
-          'photo_profile_path',
-          'photo_cover_path',
+          "id",
+          "username",
+          "email",
+          "fullname",
+          "active",
+          "birth",
+          "originCity",
+          "currentCity",
+          "job",
+          "shortBio",
+          "photo_profile_path",
+          "photo_cover_path",
         ],
       });
 
       if (people) {
         res.status(200).json({
           statusCode: 200,
-          status: 'success',
+          status: "success",
           data: people,
         });
       } else {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'People not found',
+          status: "error",
+          message: "People not found",
         });
       }
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -105,39 +116,39 @@ const userController = {
           // limit: 100,
         },
         attributes: [
-          'id',
-          'username',
-          'email',
-          'fullname',
-          'active',
-          'birth',
-          'originCity',
-          'currentCity',
-          'job',
-          'shortBio',
-          'photo_profile_path',
-          'photo_cover_path',
+          "id",
+          "username",
+          "email",
+          "fullname",
+          "active",
+          "birth",
+          "originCity",
+          "currentCity",
+          "job",
+          "shortBio",
+          "photo_profile_path",
+          "photo_cover_path",
         ],
       });
 
       if (users) {
         res.status(200).json({
           statusCode: 200,
-          status: 'success',
+          status: "success",
           data: users,
         });
       } else {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'People not found',
+          status: "error",
+          message: "People not found",
         });
       }
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -158,22 +169,22 @@ const userController = {
       const users = await user.findAll({
         where: {
           fullname: {
-            [Op.like]: Sequelize.fn('LOWER', `%${query}%`),
+            [Op.like]: Sequelize.fn("LOWER", `%${query}%`),
           },
         },
         attributes: [
-          'id',
-          'username',
-          'email',
-          'fullname',
-          'active',
-          'birth',
-          'originCity',
-          'currentCity',
-          'job',
-          'shortBio',
-          'photo_profile_path',
-          'photo_cover_path',
+          "id",
+          "username",
+          "email",
+          "fullname",
+          "active",
+          "birth",
+          "originCity",
+          "currentCity",
+          "job",
+          "shortBio",
+          "photo_profile_path",
+          "photo_cover_path",
         ],
         limit: limit ? parseInt(limit) : undefined, // Gunakan limit jika disediakan dalam query
       });
@@ -181,22 +192,22 @@ const userController = {
       if (users.length > 0) {
         res.status(200).json({
           statusCode: 200,
-          status: 'success',
+          status: "success",
           data: users,
         });
       } else {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'People not found',
+          status: "error",
+          message: "People not found",
         });
         return;
       }
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -210,33 +221,40 @@ const userController = {
       const targetUser = await user.findOne({
         where: { id: targetUserId },
         attributes: [
-          'id',
-          'username',
-          'email',
-          'fullname',
-          'active',
-          'birth',
-          'originCity',
-          'currentCity',
-          'job',
-          'shortBio',
-          'photo_profile_path',
-          'photo_cover_path',
+          "id",
+          "username",
+          "email",
+          "fullname",
+          "active",
+          "birth",
+          "originCity",
+          "currentCity",
+          "job",
+          "shortBio",
+          "photo_profile_path",
+          "photo_cover_path",
         ],
         include: [
           {
             model: post,
-            as: 'posts',
+            as: "posts",
             include: [
-              { model: filedb, as: 'files' },
+              { model: filedb, as: "files" },
               {
                 model: user,
-                as: 'user',
-                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+                as: "user",
+                attributes: [
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
               },
               {
                 model: like_db,
-                as: 'likes',
+                as: "likes",
               },
             ],
           },
@@ -246,8 +264,8 @@ const userController = {
       if (!targetUser) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'User not found',
+          status: "error",
+          message: "User not found",
         });
       }
       // supaya comment di masing2 post order desc karena comment tidak langsung ke post.
@@ -260,11 +278,18 @@ const userController = {
             include: [
               {
                 model: user,
-                as: 'user',
-                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+                as: "user",
+                attributes: [
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
               },
             ],
-            order: [['createdAt', 'DESC']], // Urutan komentar berdasarkan createdAt
+            order: [["createdAt", "DESC"]], // Urutan komentar berdasarkan createdAt
           });
 
           post.dataValues.comments = comments;
@@ -291,22 +316,25 @@ const userController = {
       const dataFriends = [];
       if (theirFriend.length > 0) {
         for (const friend of theirFriend) {
-          const friendId = friend.user_ask === targetUserId ? friend.user_receive : friend.user_ask;
+          const friendId =
+            friend.user_ask === targetUserId
+              ? friend.user_receive
+              : friend.user_ask;
 
           const friendProfile = await user.findOne({
             where: { id: friendId },
             attributes: [
-              'username',
-              'email',
-              'fullname',
-              'active',
-              'birth',
-              'originCity',
-              'currentCity',
-              'job',
-              'shortBio',
-              'photo_profile_path',
-              'photo_cover_path',
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "birth",
+              "originCity",
+              "currentCity",
+              "job",
+              "shortBio",
+              "photo_profile_path",
+              "photo_cover_path",
             ],
           });
           if (friendProfile) {
@@ -327,19 +355,19 @@ const userController = {
         },
       });
 
-      let friendStatus = 'Not Friend'; // Default status jika bukan teman
+      let friendStatus = "Not Friend"; // Default status jika bukan teman
       let friendStatusCode = 0;
 
       if (friendship) {
         if (friendship.status === true) {
-          friendStatus = 'Friend';
+          friendStatus = "Friend";
           friendStatusCode = 1;
         } else {
           if (friendship.user_ask === req.user.id) {
-            friendStatus = 'Permintaan pertemanan sudah terkirim';
+            friendStatus = "Permintaan pertemanan sudah terkirim";
             friendStatusCode = 2;
           } else {
-            friendStatus = 'Terima pertemanan';
+            friendStatus = "Terima pertemanan";
             friendStatusCode = 3;
           }
         }
@@ -347,7 +375,7 @@ const userController = {
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
+        status: "success",
         data: {
           ...targetUser.toJSON(),
           friendStatus,
@@ -357,8 +385,8 @@ const userController = {
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -369,33 +397,41 @@ const userController = {
       const findUser = await user.findOne({
         where: { id: req.user.id },
         attributes: [
-          'id',
-          'username',
-          'email',
-          'fullname',
-          'active',
-          'birth',
-          'originCity',
-          'currentCity',
-          'job',
-          'shortBio',
-          'photo_profile_path',
-          'photo_cover_path',
+          "id",
+          "username",
+          "email",
+          "fullname",
+          "active",
+          "birth",
+          "originCity",
+          "currentCity",
+          "job",
+          "shortBio",
+          "photo_profile_path",
+          "photo_cover_path",
         ],
         include: [
           {
             model: post,
-            as: 'posts',
+            as: "posts",
             include: [
-              { model: filedb, as: 'files' },
+              { model: filedb, as: "files" },
               {
                 model: user,
-                as: 'user',
-                attributes: ['id', 'username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+                as: "user",
+                attributes: [
+                  "id",
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
               },
               {
                 model: like_db,
-                as: 'likes',
+                as: "likes",
               },
               // {
               //   model: comment_db,
@@ -412,14 +448,14 @@ const userController = {
             ],
           },
         ],
-        order: [[post, 'createdAt', 'DESC']],
+        order: [[post, "createdAt", "DESC"]],
       });
 
       if (!findUser) {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'User not found',
+          status: "error",
+          message: "User not found",
         });
       }
       // dapatkan komen berururtan untuk masing2 post secara terpisah dengan urutan yang smaa
@@ -432,11 +468,18 @@ const userController = {
             include: [
               {
                 model: user,
-                as: 'user',
-                attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
+                as: "user",
+                attributes: [
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
               },
             ],
-            order: [['createdAt', 'DESC']], // Urutan komentar berdasarkan createdAt
+            order: [["createdAt", "DESC"]], // Urutan komentar berdasarkan createdAt
           });
 
           post.dataValues.comments = comments;
@@ -457,25 +500,28 @@ const userController = {
 
       const dataMyFriend = [];
       for (const friend of myFriend) {
-        const friendId = friend.user_ask === req.user.id ? friend.user_receive : friend.user_ask;
+        const friendId =
+          friend.user_ask === req.user.id
+            ? friend.user_receive
+            : friend.user_ask;
 
         const friendProfile = await user.findOne({
           where: {
             id: friendId,
           },
           attributes: [
-            'id',
-            'username',
-            'email',
-            'fullname',
-            'active',
-            'birth',
-            'originCity',
-            'currentCity',
-            'job',
-            'shortBio',
-            'photo_profile_path',
-            'photo_cover_path',
+            "id",
+            "username",
+            "email",
+            "fullname",
+            "active",
+            "birth",
+            "originCity",
+            "currentCity",
+            "job",
+            "shortBio",
+            "photo_profile_path",
+            "photo_cover_path",
           ],
         });
         if (friendProfile) {
@@ -492,15 +538,15 @@ const userController = {
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
-        message: 'Success get my profile',
+        status: "success",
+        message: "Success get my profile",
         data: findUser,
       });
     } catch (err) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -519,16 +565,20 @@ const userController = {
       // photo_profile_path: photo_profile_path,
       // photo_cover_path: photo_cover_path,
     };
-    let photo_profile_path = '';
-    let photo_cover_path = '';
+    let photo_profile_path = "";
+    let photo_cover_path = "";
 
-    if (req.files['photo_profile_path']) {
-      photo_profile_path = `${req.protocol}://${req.get('host')}/${req.files['photo_profile_path'][0].filename}`;
+    if (req.files["photo_profile_path"]) {
+      photo_profile_path = `${req.protocol}://${req.get("host")}/${
+        req.files["photo_profile_path"][0].filename
+      }`;
       updatedUserData.photo_profile_path = photo_profile_path;
     }
 
-    if (req.files['photo_cover_path']) {
-      photo_cover_path = `${req.protocol}://${req.get('host')}/${req.files['photo_cover_path'][0].filename}`;
+    if (req.files["photo_cover_path"]) {
+      photo_cover_path = `${req.protocol}://${req.get("host")}/${
+        req.files["photo_cover_path"][0].filename
+      }`;
       updatedUserData.photo_cover_path = photo_cover_path;
     }
 
@@ -538,8 +588,8 @@ const userController = {
       if (!userToUpdate) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'failed',
-          message: 'User not found',
+          status: "failed",
+          message: "User not found",
         });
       }
 
@@ -552,21 +602,21 @@ const userController = {
       if (updatedUser[0] === 1) {
         res.status(200).json({
           statusCode: 200,
-          status: 'success',
-          message: 'User updated successfully',
+          status: "success",
+          message: "User updated successfully",
         });
       } else {
         res.status(500).json({
           statusCode: 500,
-          status: 'error',
-          message: 'Failed to update user',
+          status: "error",
+          message: "Failed to update user",
         });
       }
     } catch (err) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -574,64 +624,68 @@ const userController = {
 
   registerUser: async (req, res) => {
     try {
-      if (!req.body.fullname || req.body.fullname.trim() === '') {
+      if (!req.body.fullname || req.body.fullname.trim() === "") {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'FullName cannot be empty',
+          status: "error",
+          message: "FullName cannot be empty",
         });
         return;
       }
 
-      if (!req.body.username || req.body.username.trim() === '') {
+      if (!req.body.username || req.body.username.trim() === "") {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Username cannot be empty',
+          status: "error",
+          message: "Username cannot be empty",
         });
         return;
       }
 
-      if (!req.body.email || req.body.email.trim() === '') {
+      if (!req.body.email || req.body.email.trim() === "") {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Email cannot be empty',
+          status: "error",
+          message: "Email cannot be empty",
         });
         return;
       }
 
-      if (!req.body.password || req.body.password.trim() === '') {
+      if (!req.body.password || req.body.password.trim() === "") {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'password cannot be empty',
+          status: "error",
+          message: "password cannot be empty",
         });
         return;
       }
-      const findUsername = await user.findOne({ where: { username: req.body.username } });
+      const findUsername = await user.findOne({
+        where: { username: req.body.username },
+      });
       if (findUsername) {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Username already exists',
+          status: "error",
+          message: "Username already exists",
         });
         return;
       }
       if (!isValidEmail(req.body.email)) {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Invalid email format',
+          status: "error",
+          message: "Invalid email format",
         });
         return;
       }
-      const findEmail = await user.findOne({ where: { email: req.body.email } });
+      const findEmail = await user.findOne({
+        where: { email: req.body.email },
+      });
       if (findEmail) {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Email already used',
+          status: "error",
+          message: "Email already used",
         });
         return;
       }
@@ -650,22 +704,22 @@ const userController = {
       if (postUser) {
         res.status(201).json({
           statusCode: 201,
-          status: 'success',
-          message: 'User created successfully',
+          status: "success",
+          message: "User created successfully",
           data: postUserToReturn,
         });
       } else {
         res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'Bad Request',
+          status: "error",
+          message: "Bad Request",
         });
       }
     } catch (err) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -673,9 +727,14 @@ const userController = {
 
   loginUser: async function (req, res) {
     try {
-      const findUser = await user.findOne({ where: { username: req.body.username } });
+      const findUser = await user.findOne({
+        where: { username: req.body.username },
+      });
       if (findUser) {
-        const checkPassword = await comparePassword(req.body.password, findUser.password);
+        const checkPassword = await comparePassword(
+          req.body.password,
+          findUser.password
+        );
         const selectedUser = {
           email: findUser.email,
           username: findUser.username,
@@ -684,31 +743,31 @@ const userController = {
         if (checkPassword) {
           const token = generateAccessToken({ id: findUser.id });
           res.status(200).json({
-            status: 'success',
+            status: "success",
             statusCode: 200,
-            message: 'User logged in successfully',
+            message: "User logged in successfully",
             data: selectedUser,
             token: token,
           });
         } else {
           res.status(404).json({
-            status: 'error',
+            status: "error",
             statusCode: 404,
-            message: 'Wrong Password',
+            message: "Wrong Password",
           });
         }
       } else {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'Username incorrect',
+          status: "error",
+          message: "Username incorrect",
         });
       }
     } catch (err) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -718,7 +777,7 @@ const userController = {
     try {
       const email = req.body.email;
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: "gmail",
         auth: {
           user: process.env.EMAIL_ADDRESS,
           pass: process.env.EMAIL_PASSWORD,
@@ -727,20 +786,20 @@ const userController = {
       transporter.verify(function (error, success) {
         if (error) {
           res.status(500).json({
-            status: 'error',
+            status: "error",
             statusCode: 500,
-            message: 'Internal Server Error',
+            message: "Internal Server Error",
           });
           return;
         } else {
-          console.log('Server is ready');
+          console.log("Server is ready");
         }
       });
       const otpCode = Math.floor(100000 + Math.random() * 900000);
       const mailData = {
-        from: 'nurhanna@mail.com',
+        from: "nurhanna@mail.com",
         to: email,
-        subject: 'Code Verification for Cullinary Adventures Application',
+        subject: "Code Verification for Cullinary Adventures Application",
         html: `<b>Hey there! Hanna here:)</b>
              <br>This is your OTP verification code ${otpCode}<br/>
              please enter your code in Cullinary Adventures App`,
@@ -763,23 +822,23 @@ const userController = {
         if (err) {
           res.status(404).json({
             statusCode: 404,
-            status: 'error',
-            message: 'An error occurred while sending the email',
+            status: "error",
+            message: "An error occurred while sending the email",
           });
           return;
         } else {
           res.status(200).json({
             statusCode: 200,
-            status: 'success',
-            message: 'OTP already sent successfully,Please check your email',
+            status: "success",
+            message: "OTP already sent successfully,Please check your email",
           });
         }
       });
     } catch (err) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
       return;
@@ -793,16 +852,16 @@ const userController = {
       if (!findEmail) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'Not Found',
-          message: 'User not found',
+          status: "Not Found",
+          message: "User not found",
         });
       }
 
       if (findEmail.otp != req.body.otp) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'Not Found',
-          message: 'Invalid OTP',
+          status: "Not Found",
+          message: "Invalid OTP",
         });
       }
 
@@ -810,8 +869,8 @@ const userController = {
       if (findEmail.expired < currentTime) {
         return res.status(400).json({
           statusCode: 400,
-          status: 'Bad Request',
-          message: 'OTP already expired, please request a new OTP',
+          status: "Bad Request",
+          message: "OTP already expired, please request a new OTP",
         });
       }
 
@@ -827,14 +886,14 @@ const userController = {
 
       return res.status(200).json({
         statusCode: 200,
-        status: 'Success',
-        message: 'Account verified successfully',
+        status: "Success",
+        message: "Account verified successfully",
       });
     } catch (err) {
       return res.status(500).json({
         statusCode: 500,
-        status: 'Error',
-        message: 'Internal server error',
+        status: "Error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -842,21 +901,25 @@ const userController = {
 
   changePassword: async function (req, res) {
     try {
+      // console.log("change", req.body.oldPassword);
       const findUser = await user.findOne({ where: { id: req.user.id } });
       if (findUser) {
-        const checkPassword = await comparePassword(req.body.oldPassword, findUser.password);
+        const checkPassword = await comparePassword(
+          req.body.oldPassword,
+          findUser.password
+        );
         if (!checkPassword) {
           res.json({
             statusCode: 404,
-            status: 'error',
-            message: 'Invalid Old Password',
+            status: "error",
+            message: "Invalid Old Password",
           });
         }
-        if (!req.body.newPassword || req.body.newPassword.trim() === '') {
+        if (!req.body.newPassword || req.body.newPassword.trim() === "") {
           res.json({
             statusCode: 400,
-            status: 'error',
-            message: 'New password cannot be empty',
+            status: "error",
+            message: "New password cannot be empty",
           });
           return;
         }
@@ -873,30 +936,30 @@ const userController = {
           if (updateUser == 1) {
             res.json({
               statusCode: 200,
-              status: 'success',
-              message: 'Password changed successfully',
+              status: "success",
+              message: "Password changed successfully",
             });
           }
           if (updateUser == 0) {
             res.json({
               statusCode: 200,
-              status: 'success',
-              message: 'Password changed failed',
+              status: "success",
+              message: "Password changed failed",
             });
           }
         }
       } else {
         res.json({
-          status: 'error',
+          status: "error",
           statusCode: 404,
-          message: 'User not found',
+          message: "User not found",
         });
       }
     } catch (err) {
       res.json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
     }
@@ -908,14 +971,14 @@ const userController = {
       const checkUser = await user.findOne({ where: { email: email } });
       if (!checkUser) {
         res.json({
-          status: 'error',
+          status: "error",
           statusCode: 404,
-          message: 'Email addres not registered',
+          message: "Email addres not registered",
         });
         return;
       }
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: "gmail",
         // host: 'smtp.mailtrap.io',
         // port: 2525,
         auth: {
@@ -926,9 +989,9 @@ const userController = {
       transporter.verify(function (error, success) {
         if (error) {
           res.json({
-            status: 'error',
+            status: "error",
             statusCode: 500,
-            message: 'Internal Server Error',
+            message: "Internal Server Error",
           });
           return;
         } else {
@@ -937,42 +1000,40 @@ const userController = {
       });
       const token = randtoken.generate(20);
       const mailData = {
-        from: 'nurhanna@mail.com', // sender address
+        from: "nurhanna@mail.com", // sender address
         to: req.body.email, // list of receivers
-        subject: 'Reset Email for Cullinary Adventures Application',
+        subject: "Reset Email for Your Social Media",
         html: `<b>Hey there! Hanna here:)</b>
-             <br><p>You requested for reset password, kindly to <a href="http://localhost:3000/api/user/reset-password?token=${token}">Click here to reset your password</a></p><br/>`,
+             <br><p>You requested for reset password, kindly to <a href="http://localhost:8000/reset/${token}">Click here to reset your password</a></p><br/>`,
       };
 
       transporter.sendMail(mailData, function (err, info) {
         if (err) {
           res.json({
             statusCode: 404,
-            status: 'error',
-            message: 'An error occurred while sending the email',
+            status: "error",
+            message: "An error occurred while sending the email",
           });
           return;
         } else {
-          user.update(
-            { token: token },
-            {
-              where: {
-                id: checkUser.id,
-              },
-            }
-          );
+          resetPassword_db.create({
+            token: token,
+            email: req.body.email,
+            expired: addMinutesToDate(2),
+          });
           res.json({
             statusCode: 200,
-            status: 'success',
-            message: 'link for reset password already sent successfully,Please check your email',
+            status: "success",
+            message:
+              "link for reset password already sent successfully,Please check your email",
           });
         }
       });
     } catch (err) {
-      res.json({
+      res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: err.message,
       });
       return;
@@ -983,37 +1044,44 @@ const userController = {
     try {
       const { password } = req.body;
       const token = req.query.token;
-      const findUser = await user.findOne({ where: { token: token } });
+      const findEmail = await resetPassword_db.findOne({
+        where: { token: token },
+      });
+      const findUser = await user.findOne({
+        where: { email: findEmail.email },
+      });
+
       if (!findUser) {
-        res.json({
-          status: 'error',
+        res.status(404).json({
+          status: "error",
           statusCode: 404,
-          message: 'User not found',
+          message: "User not found",
         });
         return;
       } else {
-        if (!req.body.password || req.body.password.trim() === '') {
-          res.json({
+        if (!req.body.password || req.body.password.trim() === "") {
+          res.status(400).json({
             statusCode: 400,
-            status: 'error',
-            message: 'password cannot be empty',
+            status: "error",
+            message: "password cannot be empty",
           });
           return;
         }
         // check expired otp (should not more than 2 minutes)
         const currentTime = new Date();
-        const userUpdatedAt = new Date(findUser.updatedAt);
-        const timeDifferenceInMs = currentTime - userUpdatedAt;
-        const timeDifferenceInSeconds = Math.floor(timeDifferenceInMs / 1000);
-        if (timeDifferenceInSeconds > 120) {
-          res.json({
+        if (findEmail.expired < currentTime) {
+          await resetPassword_db.destroy({
+            where: { token: token },
+          });
+          res.status(400).json({
             statusCode: 400,
-            status: 'Bad Request',
-            message: 'Link already expired, please request new link for reset password',
+            status: "Bad Request",
+            message:
+              "Link already expired, please request new link for reset password",
           });
           return;
         }
-        user.update(
+        const affectedRows = user.update(
           { password: await hashPassword(password) },
           {
             where: {
@@ -1021,17 +1089,22 @@ const userController = {
             },
           }
         );
-        res.json({
-          status: 'success',
+        if (affectedRows > 0) {
+          await resetPassword_db.destroy({
+            where: { token: token },
+          });
+        }
+        res.status(200).json({
+          status: "success",
           statusCode: 200,
-          message: 'Password already reset successfully',
+          message: "Password already reset successfully",
         });
       }
     } catch (err) {
-      res.json({
-        status: 'error',
+      res.status(500).json({
+        status: "error",
         statusCode: 500,
-        message: 'Internal server error',
+        message: "Internal server error",
         error: err.message,
       });
     }
