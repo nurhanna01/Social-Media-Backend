@@ -800,11 +800,26 @@ const userController = {
       const mailData = {
         from: "nurhanna@mail.com",
         to: email,
-        subject: "Code Verification for Cullinary Adventures Application",
-        html: `<b>Hey there! Hanna here:)</b>
-             <br>This is your OTP verification code ${otpCode}<br/>
-             please enter your code in Cullinary Adventures App`,
+        subject: "Code Verification for Social Media Application",
+        html: `
+          <div style="background-color: #f2f2f2; padding: 20px; font-family: Arial, sans-serif;">
+            <div style="background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <h2 style="color: #333;">Hey there! <span style="font-size: 18px;">😊</span></h2>
+              <p style="color: #555; margin-top: 10px;">This is your OTP verification code:</p>
+              <div style="background-color: #007bff; color: #ffffff; padding: 10px 20px; font-size: 24px; text-align: center; border-radius: 5px;">
+                ${otpCode}
+              </div>
+              <p style="color: #555; margin-top: 10px;">
+                Please enter this code in the Social Media App to verify your account.
+              </p>
+              <p style="color: #555; margin-top: 10px;">
+                If you didn't request this code, you can safely ignore this email.
+              </p>
+            </div>
+          </div>
+        `,
       };
+
       const findEmail = await otp.findOne({ where: { email: email } });
       if (findEmail) {
         await otp.update(

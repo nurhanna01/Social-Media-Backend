@@ -51,6 +51,7 @@ const notificationController = {
             ],
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
       if (!notifications) {
         res.status(404).json({
