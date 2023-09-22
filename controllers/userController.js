@@ -189,7 +189,7 @@ const userController = {
         limit: limit ? parseInt(limit) : undefined, // Gunakan limit jika disediakan dalam query
       });
 
-      if (users.length > 0) {
+      if (users) {
         res.status(200).json({
           statusCode: 200,
           status: "success",
@@ -244,6 +244,7 @@ const userController = {
                 model: user,
                 as: "user",
                 attributes: [
+                  "id",
                   "username",
                   "email",
                   "fullname",
@@ -1000,11 +1001,21 @@ const userController = {
       });
       const token = randtoken.generate(20);
       const mailData = {
-        from: "nurhanna@mail.com", // sender address
-        to: req.body.email, // list of receivers
-        subject: "Reset Email for Your Social Media",
-        html: `<b>Hey there! Hanna here:)</b>
-             <br><p>You requested for reset password, kindly to <a href="http://localhost:8000/reset/${token}">Click here to reset your password</a></p><br/>`,
+        from: "nurhanna9928@mail.com",
+        to: req.body.email,
+        subject: "Reset Kata Sandi untuk Akun Media Sosial Anda",
+        html: `
+          <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; text-align: center;">
+            <div style="background-color: #fff; max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+              <h1 style="color: #333;">Reset Kata Sandi</h1>
+              <p style="font-size: 16px;">Hai ${checkUser.fullname} :)</p>
+              <p style="font-size: 16px;">Kamu telah meminta reset kata sandi untuk akun media sosialmu.</p>
+              <a href="http://localhost:8000/reset/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">Reset Kata Sandi</a>
+              <p style="font-size: 16px;">Terima kasih sudah menggunakan layanan kami.</p>
+              <p style="font-size: 16px;">Salam, Hanna</p>
+            </div>
+          </div>
+        `,
       };
 
       transporter.sendMail(mailData, function (err, info) {

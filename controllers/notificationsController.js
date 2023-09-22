@@ -94,6 +94,21 @@ const notificationController = {
       );
       const dataToReturn = await notification_db.findAll({
         where: { user_receiver: req.user.id },
+        include: [
+          {
+            model: user,
+            as: "senderUser",
+            attributes: [
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "photo_profile_path",
+              "photo_cover_path",
+            ],
+          },
+        ],
       });
       res.status(200).json({
         statusCode: 200,
