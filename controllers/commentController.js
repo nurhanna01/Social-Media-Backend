@@ -67,11 +67,73 @@ const commentController = {
           (like) => like.user_id === req.user.id
         );
         updatedRecord.dataValues.isLike = isLike;
+
+        // success and return updated data
+        const getPostUpdated = await post.findAll({
+          include: [
+            { model: filedb, as: "files" },
+            {
+              model: user,
+              as: "user",
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "fullname",
+                "active",
+                "photo_profile_path",
+                "photo_cover_path",
+              ],
+            },
+            {
+              model: like_db,
+              as: "likes",
+            },
+            {
+              model: comment_db,
+              as: "comments",
+
+              include: [
+                {
+                  model: user,
+                  as: "user",
+                  attributes: [
+                    "id",
+                    "username",
+                    "email",
+                    "fullname",
+                    "active",
+                    "photo_profile_path",
+                    "photo_cover_path",
+                  ],
+                },
+              ],
+            },
+          ],
+          order: [
+            ["createdAt", "DESC"],
+            [comment_db, "createdAt", "DESC"],
+          ],
+        });
+
+        const postUpdatedWithStatus = getPostUpdated.map((post) => {
+          const isLike = post.likes.some(
+            (like) => like.user_id === req.user.id
+          );
+          return {
+            ...post.toJSON(),
+            isLike: isLike,
+          };
+        });
         res.status(200).json({
           statusCode: 200,
           status: "Success",
           message: "Comment posted successfully",
-          data: updatedRecord,
+          data: {
+            detail: updatedRecord,
+            allPosts: postUpdatedWithStatus,
+            targetId: findPost.user_id,
+          },
         });
       }
     } catch (error) {
@@ -100,10 +162,123 @@ const commentController = {
         where: { id: req.params.id },
       });
       if (deleteComment) {
+        const updatedRecord = await post.findOne({
+          where: { id: req.body.post_id },
+          include: [
+            { model: filedb, as: "files" },
+            {
+              model: user,
+              as: "user",
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "fullname",
+                "active",
+                "photo_profile_path",
+                "photo_cover_path",
+              ],
+            },
+            {
+              model: like_db,
+              as: "likes",
+            },
+            {
+              model: comment_db,
+              as: "comments",
+              include: [
+                {
+                  model: user,
+                  as: "user",
+                  attributes: [
+                    "id",
+                    "username",
+                    "email",
+                    "fullname",
+                    "active",
+                    "photo_profile_path",
+                    "photo_cover_path",
+                  ],
+                },
+              ],
+            },
+          ],
+          order: [
+            ["createdAt", "DESC"],
+            [comment_db, "createdAt", "DESC"],
+          ],
+        });
+        const isLike = updatedRecord.likes.some(
+          (like) => like.user_id === req.user.id
+        );
+        updatedRecord.dataValues.isLike = isLike;
+
+        // success and return updated data
+        const getPostUpdated = await post.findAll({
+          include: [
+            { model: filedb, as: "files" },
+            {
+              model: user,
+              as: "user",
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "fullname",
+                "active",
+                "photo_profile_path",
+                "photo_cover_path",
+              ],
+            },
+            {
+              model: like_db,
+              as: "likes",
+            },
+            {
+              model: comment_db,
+              as: "comments",
+
+              include: [
+                {
+                  model: user,
+                  as: "user",
+                  attributes: [
+                    "id",
+                    "username",
+                    "email",
+                    "fullname",
+                    "active",
+                    "photo_profile_path",
+                    "photo_cover_path",
+                  ],
+                },
+              ],
+            },
+          ],
+          order: [
+            ["createdAt", "DESC"],
+            [comment_db, "createdAt", "DESC"],
+          ],
+        });
+
+        const postUpdatedWithStatus = getPostUpdated.map((post) => {
+          const isLike = post.likes.some(
+            (like) => like.user_id === req.user.id
+          );
+          return {
+            ...post.toJSON(),
+            isLike: isLike,
+          };
+        });
         res.status(200).json({
           statusCode: 200,
           status: "Success",
           message: "Comment delete successfully",
+          data: {
+            detail: updatedRecord,
+            allPosts: postUpdatedWithStatus,
+            targetId: findPost.user_id,
+          },
         });
       }
     } catch (error) {

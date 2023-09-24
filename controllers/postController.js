@@ -22,12 +22,67 @@ const postController = {
           await filedb.create({ path, post_id: postToDb.id });
         });
       }
+      // success and return updated data
+      const getPostUpdated = await post.findAll({
+        include: [
+          { model: filedb, as: "files" },
+          {
+            model: user,
+            as: "user",
+            attributes: [
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "photo_profile_path",
+              "photo_cover_path",
+            ],
+          },
+          {
+            model: like_db,
+            as: "likes",
+          },
+          {
+            model: comment_db,
+            as: "comments",
+
+            include: [
+              {
+                model: user,
+                as: "user",
+                attributes: [
+                  "id",
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
+              },
+            ],
+          },
+        ],
+        order: [
+          ["createdAt", "DESC"],
+          [comment_db, "createdAt", "DESC"],
+        ],
+      });
+
+      const postStatus = getPostUpdated.map((post) => {
+        const isLike = post.likes.some((like) => like.user_id === req.user.id);
+        return {
+          ...post.toJSON(),
+          isLike: isLike,
+        };
+      });
       if (postToDb) {
         res.status(201).json({
           statusCode: 201,
           status: "success",
           message: "Post created successfully",
-          data: postToDb,
+          data: postStatus,
         });
       } else {
         res.status(404).json({
@@ -222,10 +277,67 @@ const postController = {
         return;
       }
       await post.destroy({ where: { id: req.params.id } });
+
+      // success and return updated data
+      const getPostUpdated = await post.findAll({
+        include: [
+          { model: filedb, as: "files" },
+          {
+            model: user,
+            as: "user",
+            attributes: [
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "photo_profile_path",
+              "photo_cover_path",
+            ],
+          },
+          {
+            model: like_db,
+            as: "likes",
+          },
+          {
+            model: comment_db,
+            as: "comments",
+
+            include: [
+              {
+                model: user,
+                as: "user",
+                attributes: [
+                  "id",
+                  "username",
+                  "email",
+                  "fullname",
+                  "active",
+                  "photo_profile_path",
+                  "photo_cover_path",
+                ],
+              },
+            ],
+          },
+        ],
+        order: [
+          ["createdAt", "DESC"],
+          [comment_db, "createdAt", "DESC"],
+        ],
+      });
+
+      const postStatus = getPostUpdated.map((post) => {
+        const isLike = post.likes.some((like) => like.user_id === req.user.id);
+        return {
+          ...post.toJSON(),
+          isLike: isLike,
+        };
+      });
       res.status(200).json({
         statusCode: 200,
         status: "Success",
         message: "Post delete successfully",
+        data: postStatus,
       });
     } catch (error) {
       res.status(500).json({

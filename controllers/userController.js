@@ -48,7 +48,7 @@ const userController = {
         limit: 100,
       });
 
-      // Ambil ID pengguna yang berteman dengan pengguna yang sedang masuk
+      // Ambil ID pengguna yang berteman dengan saya
       const friendUserIds = userFriends.map((friendship) => {
         return friendship.user_ask === userId
           ? friendship.user_receive
@@ -886,7 +886,7 @@ const userController = {
         return res.status(400).json({
           statusCode: 400,
           status: "Bad Request",
-          message: "OTP already expired, please request a new OTP",
+          message: "OTP already expired, please request for a new OTP",
         });
       }
 

@@ -1,13 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import db from './database/db.js';
-import recipeRouter from './routes/recipeRouter.js';
-import userRouter from './routes/userRouter.js';
-import documentation from './documentation/documentation.js';
-import postRouter from './routes/postRouter.js';
-import friendRouter from './routes/friendRouter.js';
-import likeRouter from './routes/likeRouter.js';
-import notificationRouter from './routes/notificationRouter.js';
+import express from "express";
+import cors from "cors";
+import db from "./database/db.js";
+import userRouter from "./routes/userRouter.js";
+import documentation from "./documentation/documentation.js";
+import postRouter from "./routes/postRouter.js";
+import friendRouter from "./routes/friendRouter.js";
+import likeRouter from "./routes/likeRouter.js";
+import notificationRouter from "./routes/notificationRouter.js";
 
 const port = process.env.PORT || 3000;
 
@@ -24,25 +23,24 @@ db.sync({ force: false })
     // console.log('Failed to sync database', err);
   });
 
-app.use('/', documentation);
-app.use('/api/recipe', recipeRouter);
-app.use('/api/user', userRouter);
-app.use('/api/post', postRouter);
-app.use('/api/friends', friendRouter);
-app.use('/api/notifications', notificationRouter);
+app.use("/", documentation);
+app.use("/api/user", userRouter);
+app.use("/api/post", postRouter);
+app.use("/api/friends", friendRouter);
+app.use("/api/notifications", notificationRouter);
 
-app.use(express.static('public/images'));
+app.use(express.static("public/images"));
 
-app.all('*', (req, res) => {
+app.all("*", (req, res) => {
   res.status(404).json({
     statusCode: 404,
-    status: 'Not Found',
-    message: 'API Not Found',
+    status: "Not Found",
+    message: "API Not Found",
   });
 });
 
 app.listen(port, () => {
-  console.log(`Listening culinary adventures on port ${port}`);
+  console.log(`Listening Social media at port ${port}`);
 });
 
 export default app;
