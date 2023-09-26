@@ -8,7 +8,6 @@ const postController = {
     try {
       const loginUser = await user.findOne({ where: { id: req.user.id } });
       const files = req.files;
-      console.log(files, "files");
       const newPost = {
         description: req.body.description,
         // path: `${req.protocol}://${req.get('host')}/${req.file.filename}`,
@@ -16,11 +15,24 @@ const postController = {
       };
       const postToDb = await post.create(newPost);
       if (postToDb) {
-        files.forEach(async (file) => {
-          // const filePath = `uploads/${file.filename}`;
+        // files.forEach(async (file) => {
+        //   // const filePath = `uploads/${file.filename}`;
+        //   const path = `${req.protocol}://${req.get("host")}/${file.filename}`;
+        //   const postFiletoDb = await filedb.create({
+        //     path,
+        //     post_id: postToDb.id,
+        //   });
+        // });
+        const filePromises = files.map(async (file) => {
           const path = `${req.protocol}://${req.get("host")}/${file.filename}`;
-          await filedb.create({ path, post_id: postToDb.id });
+          await filedb.create({
+            path,
+            post_id: postToDb.id,
+          });
         });
+
+        // Menunggu hingga semua file berhasil diunggah
+        await Promise.all(filePromises);
       }
       // success and return updated data
       const getPostUpdated = await post.findAll({
