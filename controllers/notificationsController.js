@@ -3,9 +3,21 @@ const notificationController = {
   createNotifications: async (req, res) => {
     try {
       const findSender = await user.findOne({ where: { id: req.user.id } });
+      const findLike = await notification_db.findOne({
+        where: { post_id: req.body.post_id, user_sender: req.user.id },
+      });
+      if (findLike) {
+        res.status(200).json({
+          statusCode: 200,
+          status: "success",
+          message: "Notifications already exist.",
+        });
+        return;
+      }
       const createNotif = await notification_db.create({
         user_sender: req.user.id,
         user_receiver: req.body.user_receiver,
+        post_id: req.body.post_id,
         text: findSender.fullname + " " + req.body.text,
       });
       if (createNotif) {

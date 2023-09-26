@@ -1,5 +1,5 @@
-import { user, friend } from '../database/db.js';
-import { Op } from 'sequelize';
+import { user, friend } from "../database/db.js";
+import { Op } from "sequelize";
 const friendController = {
   getFriends: async function (req, res) {
     try {
@@ -14,38 +14,38 @@ const friendController = {
         include: [
           {
             model: user,
-            as: 'askedUser',
+            as: "askedUser",
             attributes: [
-              'id',
-              'username',
-              'email',
-              'fullname',
-              'active',
-              'birth',
-              'originCity',
-              'currentCity',
-              'job',
-              'shortBio',
-              'photo_profile_path',
-              'photo_cover_path',
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "birth",
+              "originCity",
+              "currentCity",
+              "job",
+              "shortBio",
+              "photo_profile_path",
+              "photo_cover_path",
             ],
           },
           {
             model: user,
-            as: 'receivedUser',
+            as: "receivedUser",
             attributes: [
-              'id',
-              'username',
-              'email',
-              'fullname',
-              'active',
-              'birth',
-              'originCity',
-              'currentCity',
-              'job',
-              'shortBio',
-              'photo_profile_path',
-              'photo_cover_path',
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "birth",
+              "originCity",
+              "currentCity",
+              "job",
+              "shortBio",
+              "photo_profile_path",
+              "photo_cover_path",
             ],
           },
         ],
@@ -53,22 +53,22 @@ const friendController = {
       if (friends) {
         res.status(200).json({
           statusCode: 200,
-          status: 'success',
+          status: "success",
           data: friends,
         });
       } else {
         res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'Friends not found',
+          status: "error",
+          message: "Friends not found",
         });
         return;
       }
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -76,15 +76,16 @@ const friendController = {
 
   askFriend: async (req, res) => {
     try {
-      const userId = req.user.id; // ID pengguna yang sedang masuk
+      const userId = req.user.id;
       const targetUserId = req.body.id; // ID pengguna tujuan permintaan pertemanan
+      console.log(userId, targetUserId);
 
       // Cek apakah pengguna sedang masuk dan tujuan permintaan pertemanan adalah pengguna yang sama
-      if (userId === targetUserId) {
+      if (userId == targetUserId) {
         return res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'You cannot send a friend request to yourself.',
+          status: "error",
+          message: "You cannot send a friend request to yourself.",
         });
       }
 
@@ -101,8 +102,8 @@ const friendController = {
       if (existingRequest) {
         return res.status(400).json({
           statusCode: 400,
-          status: 'error',
-          message: 'A friend request has already been sent or received.',
+          status: "error",
+          message: "A friend request has already been sent or received.",
         });
       }
 
@@ -110,31 +111,30 @@ const friendController = {
       await friend.create({
         user_ask: userId,
         user_receive: targetUserId,
-        status: false, // Set status ke false karena ini adalah permintaan yang belum disetujui
+        status: false,
       });
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
-        message: 'Friend request sent successfully.',
+        status: "success",
+        message: "Friend request sent successfully.",
       });
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
   },
 
   responseFriend: async (req, res) => {
-    console.log(req.body);
     try {
       console.log(req.body.request_id);
       const userId = req.user.id;
       const requestId = req.body.request_id;
-      const accept = req.body.accept === 'true';
+      const accept = req.body.accept === "true";
 
       const friendRequest = await friend.findOne({
         where: {
@@ -146,8 +146,8 @@ const friendController = {
       if (!friendRequest) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'Friend request not found or already accepted/rejected.',
+          status: "error",
+          message: "Friend request not found or already accepted/rejected.",
         });
       }
 
@@ -170,14 +170,15 @@ const friendController = {
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
-        message: 'Friend request has been ' + (accept ? 'accepted' : 'rejected') + '.',
+        status: "success",
+        message:
+          "Friend request has been " + (accept ? "accepted" : "rejected") + ".",
       });
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -195,20 +196,20 @@ const friendController = {
         include: [
           {
             model: user,
-            as: 'askedUser',
+            as: "askedUser",
             attributes: [
-              'id',
-              'username',
-              'email',
-              'fullname',
-              'active',
-              'birth',
-              'originCity',
-              'currentCity',
-              'job',
-              'shortBio',
-              'photo_profile_path',
-              'photo_cover_path',
+              "id",
+              "username",
+              "email",
+              "fullname",
+              "active",
+              "birth",
+              "originCity",
+              "currentCity",
+              "job",
+              "shortBio",
+              "photo_profile_path",
+              "photo_cover_path",
             ],
           },
         ],
@@ -216,14 +217,14 @@ const friendController = {
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
+        status: "success",
         data: friendRequests,
       });
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }
@@ -246,8 +247,8 @@ const friendController = {
       if (!friendship) {
         return res.status(404).json({
           statusCode: 404,
-          status: 'error',
-          message: 'Friendship not found.',
+          status: "error",
+          message: "Friendship not found.",
         });
       }
 
@@ -255,14 +256,14 @@ const friendController = {
 
       res.status(200).json({
         statusCode: 200,
-        status: 'success',
-        message: 'Friendship has been deleted.',
+        status: "success",
+        message: "Friendship has been deleted.",
       });
     } catch (error) {
       res.status(500).json({
         statusCode: 500,
-        status: 'error',
-        message: 'Internal server error',
+        status: "error",
+        message: "Internal server error",
         error: error.message,
       });
     }

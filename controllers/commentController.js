@@ -147,9 +147,7 @@ const commentController = {
   },
   destroyComment: async (req, res) => {
     try {
-      const findComment = await comment_db.findOne({
-        where: { id: req.params.id },
-      });
+      const findComment = await comment_db.findByPk(req.params.id);
       if (!findComment) {
         res.status(404).json({
           statusCode: 404,
@@ -163,7 +161,7 @@ const commentController = {
       });
       if (deleteComment) {
         const updatedRecord = await post.findOne({
-          where: { id: req.body.post_id },
+          where: { id: findComment.post_id },
           include: [
             { model: filedb, as: "files" },
             {
@@ -277,7 +275,7 @@ const commentController = {
           data: {
             detail: updatedRecord,
             allPosts: postUpdatedWithStatus,
-            targetId: findPost.user_id,
+            targetId: updatedRecord.user_id,
           },
         });
       }

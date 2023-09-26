@@ -29,7 +29,8 @@ const comparePassword = async (plaintextPassword, hash) => {
 };
 
 function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "144000s" });
+  // 2
+  return jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: "172800s" });
 }
 
 const userController = {
@@ -44,8 +45,6 @@ const userController = {
           [Op.or]: [{ user_ask: userId }, { user_receive: userId }],
           // status: true,
         },
-        order: Sequelize.literal("RAND()"), // Menggunakan fungsi SQL RAND() untuk pengacakan
-        limit: 100,
       });
 
       // Ambil ID pengguna yang berteman dengan saya
@@ -76,6 +75,8 @@ const userController = {
           "photo_profile_path",
           "photo_cover_path",
         ],
+        order: Sequelize.literal("RAND()"), // Menggunakan fungsi SQL RAND() untuk pengacakan
+        limit: 100,
       });
 
       if (people) {
@@ -1025,7 +1026,7 @@ const userController = {
               <h1 style="color: #333;">Reset Kata Sandi</h1>
               <p style="font-size: 16px;">Hai ${checkUser.fullname} :)</p>
               <p style="font-size: 16px;">Kamu telah meminta reset kata sandi untuk akun media sosialmu.</p>
-              <a href="http://localhost:8000/reset/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">Reset Kata Sandi</a>
+              <a href="${process.env.FE_HOST}/reset/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">Reset Kata Sandi</a>
               <p style="font-size: 16px;">Terima kasih sudah menggunakan layanan kami.</p>
               <p style="font-size: 16px;">Salam, Hanna</p>
             </div>
