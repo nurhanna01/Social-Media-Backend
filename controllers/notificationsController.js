@@ -122,6 +122,7 @@ const notificationController = {
             ],
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
       res.status(200).json({
         statusCode: 200,
@@ -160,6 +161,7 @@ const notificationController = {
             ],
           },
         ],
+        order: [["createdAt", "DESC"]],
       });
       await notification_db.update(
         { isSeen: true },

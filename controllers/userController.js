@@ -813,6 +813,7 @@ const userController = {
               <p style="color: #555; margin-top: 10px;">
                 Please enter this code in the Social Media App to verify your account.
               </p>
+              <p style="font-size: 16px;">Also, please note that this code will expire in 2 minutes.</p>
               <p style="color: #555; margin-top: 10px;">
                 If you didn't request this code, you can safely ignore this email.
               </p>
@@ -1021,16 +1022,18 @@ const userController = {
         to: req.body.email,
         subject: "Reset Kata Sandi untuk Akun Media Sosial Anda",
         html: `
-          <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; text-align: center;">
-            <div style="background-color: #fff; max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-              <h1 style="color: #333;">Reset Kata Sandi</h1>
-              <p style="font-size: 16px;">Hai ${checkUser.fullname} :)</p>
-              <p style="font-size: 16px;">Kamu telah meminta reset kata sandi untuk akun media sosialmu.</p>
-              <a href="${process.env.FE_HOST}/reset/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">Reset Kata Sandi</a>
-              <p style="font-size: 16px;">Terima kasih sudah menggunakan layanan kami.</p>
-              <p style="font-size: 16px;">Salam, Hanna</p>
-            </div>
-          </div>
+        <div style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; text-align: center;">
+        <div style="background-color: #fff; max-width: 500px; margin: 0 auto; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #333;">Reset Password</h1>
+          <p style="font-size: 16px;">Hi ${checkUser.fullname} :)</p>
+          <p style="font-size: 16px;">You have requested to reset your password for your social media account.</p>
+          <a href="${process.env.FE_HOST}/reset/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px; margin-top: 20px;">Reset Password</a>
+          <p style="font-size: 16px;">Please note that this link will expire in 2 minutes.</p>
+          <p style="font-size: 16px;">Thank you for using our services.</p>
+          <p style="font-size: 16px;">Regards, Hanna</p>
+        </div>
+      </div>
+      
         `,
       };
 
