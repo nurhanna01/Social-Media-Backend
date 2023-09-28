@@ -557,9 +557,19 @@ const userController = {
   },
 
   updateprofile: async function (req, res) {
+    const findUsername = await user.findOne({
+      where: { username: req.body.username },
+    });
+    if (findUsername) {
+      res.status(400).json({
+        statusCode: 400,
+        status: "error",
+        message: "Username already exists",
+      });
+      return;
+    }
     const updatedUserData = {
       username: req.body.username,
-      email: req.body.email,
       fullname: req.body.fullname,
       birth: req.body.birth,
       originCity: req.body.originCity,
