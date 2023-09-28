@@ -557,6 +557,14 @@ const userController = {
   },
 
   updateprofile: async function (req, res) {
+    if (!req.body.username || req.body.username.trim() === "") {
+      res.status(400).json({
+        statusCode: 400,
+        status: "error",
+        message: "Username cannot be empty",
+      });
+      return;
+    }
     const findUsername = await user.findOne({
       where: { username: req.body.username },
     });
@@ -570,6 +578,7 @@ const userController = {
     }
     const updatedUserData = {
       username: req.body.username,
+
       fullname: req.body.fullname,
       birth: req.body.birth,
       originCity: req.body.originCity,
