@@ -307,45 +307,47 @@ const userController = {
         const isLike = post.likes.some((like) => like.user_id === req.user.id);
         post.dataValues.isLike = isLike;
       });
+
       // cari teman dia
-      const theirFriend = await friend.findAll({
+      const myFriend = await friend.findAll({
         where: {
           [Op.or]: [{ user_ask: targetUserId }, { user_receive: targetUserId }],
           status: true,
         },
       });
 
-      const dataFriends = [];
-      if (theirFriend.length > 0) {
-        for (const friend of theirFriend) {
-          const friendId =
-            friend.user_ask === targetUserId
-              ? friend.user_receive
-              : friend.user_ask;
+      const dataMyFriend = [];
+      for (const friend of myFriend) {
+        const friendId =
+          friend.user_ask == targetUserId
+            ? friend.user_receive
+            : friend.user_ask;
 
-          const friendProfile = await user.findOne({
-            where: { id: friendId },
-            attributes: [
-              "username",
-              "email",
-              "fullname",
-              "active",
-              "birth",
-              "originCity",
-              "currentCity",
-              "job",
-              "shortBio",
-              "photo_profile_path",
-              "photo_cover_path",
-            ],
-          });
-          if (friendProfile) {
-            dataFriends.push(friendProfile);
-          }
+        const friendProfile = await user.findOne({
+          where: {
+            id: friendId,
+          },
+          attributes: [
+            "id",
+            "username",
+            "email",
+            "fullname",
+            "active",
+            "birth",
+            "originCity",
+            "currentCity",
+            "job",
+            "shortBio",
+            "photo_profile_path",
+            "photo_cover_path",
+          ],
+        });
+        if (friendProfile) {
+          dataMyFriend.push(friendProfile);
         }
       }
 
-      targetUser.dataValues.friends = dataFriends;
+      targetUser.dataValues.friends = dataMyFriend;
 
       // Cek status pertemanan antara pengguna yang sedang masuk dan pengguna tujuan
       const friendship = await friend.findOne({
