@@ -361,18 +361,21 @@ const userController = {
 
       let friendStatus = "Not Friend"; // Default status jika bukan teman
       let friendStatusCode = 0;
-
+      let friendId = null;
       if (friendship) {
         if (friendship.status === true) {
           friendStatus = "Friend";
           friendStatusCode = 1;
+          friendId = friendship.id;
         } else {
           if (friendship.user_ask === req.user.id) {
             friendStatus = "Permintaan pertemanan sudah terkirim";
             friendStatusCode = 2;
+            friendId = friendship.id;
           } else {
             friendStatus = "Terima pertemanan";
             friendStatusCode = 3;
+            friendId = friendship.id;
           }
         }
       }
@@ -384,6 +387,7 @@ const userController = {
           ...targetUser.toJSON(),
           friendStatus,
           friendStatusCode,
+          friendId,
         },
       });
     } catch (error) {
@@ -437,18 +441,6 @@ const userController = {
                 model: like_db,
                 as: "likes",
               },
-              // {
-              //   model: comment_db,
-              //   as: 'comments',
-
-              //   include: [
-              //     {
-              //       model: user,
-              //       as: 'user',
-              //       attributes: ['username', 'email', 'fullname', 'active', 'photo_profile_path', 'photo_cover_path'],
-              //     },
-              //   ],
-              // },
             ],
           },
         ],

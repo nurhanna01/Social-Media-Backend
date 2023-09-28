@@ -142,39 +142,41 @@ const notificationController = {
 
   readAllUnreadNotifications: async (req, res) => {
     try {
-      const notifications = await notification_db.findAll({
-        where: {
-          user_receiver: req.user.id,
-        },
-        include: [
-          {
-            model: user,
-            as: "senderUser",
-            attributes: [
-              "id",
-              "username",
-              "email",
-              "fullname",
-              "active",
-              "photo_profile_path",
-              "photo_cover_path",
-            ],
-          },
-        ],
-        order: [["createdAt", "DESC"]],
-      });
-      await notification_db.update(
+      const readAll = await notification_db.update(
         { isSeen: true },
         { where: { user_receiver: req.user.id, isSeen: false } }
       );
+      if (readAll) {
+        const notifications = await notification_db.findAll({
+          where: {
+            user_receiver: req.user.id,
+          },
+          include: [
+            {
+              model: user,
+              as: "senderUser",
+              attributes: [
+                "id",
+                "username",
+                "email",
+                "fullname",
+                "active",
+                "photo_profile_path",
+                "photo_cover_path",
+              ],
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
 
-      res.status(200).json({
-        statusCode: 200,
-        status: "success",
-        message:
-          "All unread notifications have been marked as read successfully",
-        data: notifications,
-      });
+        res.status(200).json({
+          statusCode: 200,
+          status: "success",
+          message:
+            "All unread notifications have been marked as read successfully",
+          data: notifications,
+        });
+      }
     } catch (error) {
       res.status(500).json({
         statusCode: 500,

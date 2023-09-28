@@ -78,7 +78,6 @@ const friendController = {
     try {
       const userId = req.user.id;
       const targetUserId = req.body.id; // ID pengguna tujuan permintaan pertemanan
-      console.log(userId, targetUserId);
 
       // Cek apakah pengguna sedang masuk dan tujuan permintaan pertemanan adalah pengguna yang sama
       if (userId == targetUserId) {
