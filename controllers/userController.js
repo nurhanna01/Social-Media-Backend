@@ -566,8 +566,9 @@ const userController = {
       return;
     }
     const findUsername = await user.findOne({
-      where: { username: req.body.username },
+      where: { username: req.body.username, id: { [Op.ne]: req.user.id } },
     });
+
     if (findUsername) {
       res.status(400).json({
         statusCode: 400,
@@ -940,7 +941,6 @@ const userController = {
 
   changePassword: async function (req, res) {
     try {
-      // console.log("change", req.body.oldPassword);
       const findUser = await user.findOne({ where: { id: req.user.id } });
       if (findUser) {
         const checkPassword = await comparePassword(
